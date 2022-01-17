@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+	</head>
+	<body>
+		<script src="VLUtil.js"></script>
+		<script>
+			scoreChordWrap = Module.cwrap('scoreChord', 'number', ['array', 'number', 'array', 'number']);
+			//optimizeChordWrap = Module.cwrap('optimizeChord', 'array', ['array', 'number', 'array', 'number']);
+			function scoreChord(chord1, chord2){
+				return(scoreChordWrap(chord1, chord1.length, chord2, chord2.length));
+			}
+			function optimizeChord(chord1, chord2){
+				var myTypedArray = new Uint8Array(128);
+				var buf = Module._malloc(myTypedArray.length*myTypedArray.BYTES_PER_ELEMENT);
+				Module.HEAPU8.set(myTypedArray, buf);
+				var optimizeChordWrap = Module.cwrap('optimizeChord', 'number', ['array', 'number', 'array', 'number'], [buf]);
+				optimizeChordWrap(chord1, chord1.length, chord2, chord2.length);
+				return(buf);//TODO:  figure out how to return this value
+				//Module._free(buf);
+				//return(optimizeChordWrap(chord1, chord1.length, chord2, chord2.length));
+			}
+			function testFunc(){
+				alert("Called func");
+			}
+		</script>
+		<button class="button" onclick="testFunc()">Run score</button>
+	</body>
+</html>
