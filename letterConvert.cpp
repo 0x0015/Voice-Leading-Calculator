@@ -65,7 +65,7 @@ uint8_t noteFromLetter(std::string letter){
 			letterOnly = 11;
 			break;
 		default:
-			return(-1);
+			return(0);
 	}
 	int octive;
 	try{
@@ -108,7 +108,7 @@ std::string letterFromNote(uint8_t note, bool preferFlat){
 			if(preferFlat){
 				return("Gb" + octiveStr);
 			}else{
-				return("E#" + octiveStr);
+				return("F#" + octiveStr);
 			}
 		case 7:
 			return("G" + octiveStr);

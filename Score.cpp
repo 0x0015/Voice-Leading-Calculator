@@ -89,11 +89,43 @@ void Score::recursePossibleOctives(std::vector<std::vector<uint8_t>>& possibleOc
 	}
 }
 
-std::vector<uint8_t> getOctives(uint8_t note){
+uint8_t getHighestNote(std::vector<uint8_t>& chord){
+	uint8_t output = 0;
+	for(int i=0;i<chord.size();i++){
+		if(output<chord[i]){
+			output=chord[i];
+		}
+	}
+	return(output);
+}
+
+uint8_t getLowestNote(std::vector<uint8_t>& chord){
+	uint8_t output = std::numeric_limits<uint8_t>::max();
+	for(int i=0;i<chord.size();i++){
+		if(chord[i]<output){
+			output=chord[i];
+		}
+	}
+	return(output);
+}
+
+uint8_t clampToUI8(int note){
+	if(note<0){
+		return(0);
+	}
+	if(note>std::numeric_limits<uint8_t>::max()){
+		return(std::numeric_limits<uint8_t>::max());
+	}
+	return((uint8_t)note);
+}
+
+std::vector<uint8_t> getOctives(uint8_t note, uint8_t max, uint8_t min){
 	std::vector<uint8_t> output;
 	unsigned int currentNote = (unsigned int)(note%12);
 	while(currentNote < std::numeric_limits<uint8_t>::max()){
-		output.push_back((uint8_t)currentNote);
+		if(currentNote >= min && currentNote <= max){
+			output.push_back((uint8_t)currentNote);
+		}
 		currentNote+=12;
 	}
 	return(output);
@@ -103,8 +135,10 @@ std::vector<uint8_t> Score::optimizeScore(std::vector<uint8_t>& chord1, std::vec
 	unsigned int bestScore = std::numeric_limits<unsigned int>::max();
 	std::vector<uint8_t> bestChord;
 	std::vector<std::vector<uint8_t>> possibleOctives;
+	uint8_t lowestSearch = clampToUI8((int)getLowestNote(chord1)-12);
+	uint8_t highestSearch = clampToUI8((int)getHighestNote(chord1)+12);
 	for(int i=0;i<chord2.size();i++){
-		possibleOctives.push_back(getOctives(chord2[i]));
+		possibleOctives.push_back(getOctives(chord2[i], highestSearch, lowestSearch));
 	}
 	unsigned int computeCount = 0;
 	recursePossibleOctives(possibleOctives, chord1, 0, {}, bestScore, bestChord, computeCount);

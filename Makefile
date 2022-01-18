@@ -26,4 +26,4 @@ clean:
 	rm -f em_build/VLUtil.js em_build/VLUtil.wasm
 
 em:
-	em++ letterConvert.cpp Score.cpp emscripten.cpp -o em_build/VLUtil.js -std=c++17 -s WASM=1 -s EXPORTED_RUNTIME_METHODS=ccall,cwrap
+	em++ letterConvert.cpp Score.cpp emscripten.cpp -o em_build/VLUtil.js -std=c++17 -s WASM=1 -s EXPORTED_RUNTIME_METHODS=ccall,cwrap -s ASSERTIONS=1

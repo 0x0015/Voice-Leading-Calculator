@@ -1,29 +1,51 @@
 <!DOCTYPE html>
 <html lang="en-us">
 	<head>
-	</head>
-	<body>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="w3.css">	
 		<script src="VLUtil.js"></script>
-		<script>
-			scoreChordWrap = Module.cwrap('scoreChord', 'number', ['array', 'number', 'array', 'number']);
-			//optimizeChordWrap = Module.cwrap('optimizeChord', 'array', ['array', 'number', 'array', 'number']);
-			function scoreChord(chord1, chord2){
-				return(scoreChordWrap(chord1, chord1.length, chord2, chord2.length));
-			}
-			function optimizeChord(chord1, chord2){
-				var myTypedArray = new Uint8Array(128);
-				var buf = Module._malloc(myTypedArray.length*myTypedArray.BYTES_PER_ELEMENT);
-				Module.HEAPU8.set(myTypedArray, buf);
-				var optimizeChordWrap = Module.cwrap('optimizeChord', 'number', ['array', 'number', 'array', 'number'], [buf]);
-				optimizeChordWrap(chord1, chord1.length, chord2, chord2.length);
-				return(buf);//TODO:  figure out how to return this value
-				//Module._free(buf);
-				//return(optimizeChordWrap(chord1, chord1.length, chord2, chord2.length));
-			}
-			function testFunc(){
-				alert("Called func");
-			}
-		</script>
-		<button class="button" onclick="testFunc()">Run score</button>
+		<script src="VLUtilWrap.js"></script>
+	</head>
+	<body onload="setup()">
+		<div class="w3-center w3-panel w3-padding-large w3-padding-32">
+			<div class="w3-row-padding">
+				<div class="w3-container w3-half">
+					<table class="w3-table">
+						<tr>
+						<th><text>First Chord: </text></th>
+						<th><input type="text" class="c1n1 w3-input"></input></th>
+						<th><input type="text" class="c1n2 w3-input"></input></th>
+						<th><input type="text" class="c1n3 w3-input"></input></th>
+						<th><input type="text" class="c1n4 w3-input"></input></th>
+						<th><input type="text" class="c1n5 w3-input"></input></th>
+						<th><input type="text" class="c1n6 w3-input"></input></th>
+						</tr>
+						<tr>
+						<th><text>Second Chord: </text></th>
+						<th><input type="text" class="c2n1 w3-input"></input></th>
+						<th><input type="text" class="c2n2 w3-input"></input></th>
+						<th><input type="text" class="c2n3 w3-input"></input></th>
+						<th><input type="text" class="c2n4 w3-input"></input></th>
+						<th><input type="text" class="c2n5 w3-input"></input></th>
+						<th><input type="text" class="c2n6 w3-input"></input></th>
+						</tr>
+					</table>
+				</div>
+			
+				<div class="w3-container w3-half w3-left">
+					<table class="w3-table">
+						<tr>
+						<th><button class="scoreButton w3-button w3-light-grey" onclick="scoreChordButtonClick()">Score Chord</button></th>
+						<th><text class="scoreButtonResult"></text></th>
+						</tr>
+						<tr>
+						<th><button class="optimizeButton w3-button w3-light-grey" onclick="optimizeChordButtonClick()">Optimize Chord</button></th>
+						<th><text class="optimizeButtonResult"></text></th>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
