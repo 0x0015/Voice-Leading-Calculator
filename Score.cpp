@@ -143,5 +143,5 @@ std::vector<uint8_t> Score::optimizeScore(std::vector<uint8_t>& chord1, std::vec
 	unsigned int computeCount = 0;
 	recursePossibleOctives(possibleOctives, chord1, 0, {}, bestScore, bestChord, computeCount);
 	std::cout<<"Optimized score in "<<computeCount<<" iterations"<<std::endl;
-	return(bestChord);
+	return(sortChord(bestChord));
 }

@@ -8,6 +8,7 @@ getLetterFromNumber_LenWrap = Module.cwrap('getLetterFromNumber_Len', 'number', 
 freeWrap = Module.cwrap('freeArr', '', 'number');
 
 var notesPerChord = 6;
+var lastOptimizedChord = [];
 
 function scoreChord(chord1, chord2){
 	return(scoreChordWrap(chord1, chord1.length, chord2, chord2.length));
@@ -30,6 +31,8 @@ function setup(){
 		var c2n = document.getElementsByClassName("c2n" + i);
 		c2n[0].style.width = inputStyle;
 	}
+	document.getElementsByClassName("playOptimizedChord")[0].style.display = "none";
+	PlayerInit();
 }
 function string2cstring(inputStr){
 	let output = [];
@@ -82,6 +85,7 @@ function optimizeChordButtonClick(){
 	var chord1 = getChordn(1);
 	var chord2 = getChordn(2);
 	var score = optimizeChord(chord1, chord2);
+	var scoreVal = scoreChord(chord1, score);
 	var resultText = "Result: ";
 	for(var i=0;i<score.length;i++){
 		var note = getLetterFromNumber(score[i]);
@@ -90,5 +94,22 @@ function optimizeChordButtonClick(){
 			resultText += " ";
 		}
 	}
+	resultText += ", Score: " + scoreVal;
 	scoreText.innerHTML = resultText;
+	lastOptimizedChord = score;
+	document.getElementsByClassName("playOptimizedChord")[0].style.display = "";
+}
+
+function playChord1(){
+	var chord1 = getChordn(1);
+	playNotes(chord1, 127, 1);
+}
+
+function playChord2(){
+	var chord2 = getChordn(2);
+	playNotes(chord2, 127, 1);
+}
+
+function playOptimizedChord(){
+	playNotes(lastOptimizedChord, 127, 1);
 }

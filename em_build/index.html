@@ -6,6 +6,22 @@
 		<link rel="stylesheet" href="w3.css">	
 		<script src="VLUtil.js"></script>
 		<script src="VLUtilWrap.js"></script>
+
+		<script src="MIDI/inc/shim/Base64.js"></script>
+		<script src="MIDI/inc/shim/Base64binary.js"></script>
+		<script src="MIDI/inc/shim/WebAudioAPI.js"></script>
+
+		<script src="MIDI/js/midi/audioDetect.js"></script>
+		<script src="MIDI/js/midi/gm.js"></script>
+		<script src="MIDI/js/midi/loader.js"></script>
+		<script src="MIDI/js/midi/plugin.audiotag.js"></script>
+		<script src="MIDI/js/midi/plugin.webaudio.js"></script>
+		<script src="MIDI/js/midi/plugin.webmidi.js"></script>
+
+		<script src="MIDI/js/util/dom_request_xhr.js"></script>
+		<script src="MIDI/js/util/dom_request_script.js"></script>
+
+		<script src="Player.js"></script>
 	</head>
 	<body onload="setup()">
 		<div class="w3-center w3-panel w3-padding-large w3-padding-32">
@@ -37,15 +53,25 @@
 					<table class="w3-table">
 						<tr>
 						<th><button class="scoreButton w3-button w3-light-grey" onclick="scoreChordButtonClick()">Score Chord</button></th>
+						<th><button class="playChord1 w3-button w3-light-grey" onclick="playChord1()">Play chord 1</button></th>
+
 						<th><text class="scoreButtonResult"></text></th>
 						</tr>
 						<tr>
 						<th><button class="optimizeButton w3-button w3-light-grey" onclick="optimizeChordButtonClick()">Optimize Chord</button></th>
-						<th><text class="optimizeButtonResult"></text></th>
+						<th><button class="playChord2 w3-button w3-light-grey" onclick="playChord2()">Play Chord 2</button></th>
+						<th><text class="optimizeButtonResult"></text>
+							<button class="playOptimizedChord w3-button w3-light-grey" onclick="playOptimizedChord()">Play</button>
+						</th>
 						</tr>
 					</table>
 				</div>
 			</div>
 		</div>
 	</body>
+	<footer class="w3-container w3-light-grey">
+		<p>Using emscripten <a href="emscripten/LICENSE.txt">License</a></p>
+		<p>Using MIDI.js <a href="MIDI/LICENSE.txt">License</a></p>
+		<p>Using Fluid Soundfont <a href="https://creativecommons.org/licenses/by/3.0/us">Copyright under creative commons 3.0</a> <a href="https://gleitz.github.io/midi-js-soundfonts">Link</a></p>
+	</footer>
 </html>
