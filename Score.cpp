@@ -5,7 +5,7 @@
 
 
 
-std::vector<uint8_t> sortChord(std::vector<uint8_t>& chord){
+std::vector<uint8_t> Score::sortChord(std::vector<uint8_t>& chord){
 	std::vector<uint8_t> output;
 	while(output.size() < chord.size()){
 		uint8_t noteToAdd = std::numeric_limits<uint8_t>::max();

@@ -27,6 +27,7 @@ public:
 	static unsigned int scoreRanges(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2);
 	static std::vector<uint8_t> optimizeScore(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2);
 	static void printChord(std::vector<uint8_t>& chord);
+	static std::vector<uint8_t> sortChord(std::vector<uint8_t>& chord);
 private:
 	static void recursePossibleOctives(std::vector<std::vector<uint8_t>>& possibleOctives, std::vector<uint8_t>& chord1, int i, std::vector<uint8_t> accum, unsigned int& bestScore, std::vector<uint8_t>& bestChord, unsigned int& computeCount);
 };

@@ -133,3 +133,13 @@ std::string letterFromNote(uint8_t note, bool preferFlat){
 			return("");
 	}
 }
+
+uint8_t isNoteFlat(std::string note){
+	if(note.find("b") != std::string::npos){
+		return(2);
+	}else if(note.find("#") != std::string::npos){
+		return(1);
+	}else{
+		return(0);
+	}
+}

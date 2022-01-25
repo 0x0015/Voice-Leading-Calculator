@@ -12,6 +12,7 @@ extern "C" {
 	uint32_t EMSCRIPTEN_KEEPALIVE getLetterFromNumber_Len(uint8_t note);
 	uint32_t EMSCRIPTEN_KEEPALIVE strlen_r(const char* str);
 	void EMSCRIPTEN_KEEPALIVE freeArr(char* array);
+	uint8_t EMSCRIPTEN_KEEPALIVE noteFlat(const char* str);
 }
 
 void freeArr(char* array){
@@ -42,6 +43,11 @@ uint32_t getLetterFromNumber_Len(uint8_t note){
 uint8_t getNumberFromLetter(const char* s){
 	std::string cppstring(s);
 	return(noteFromLetter(cppstring));
+}
+
+uint8_t noteFlat(const char* s){
+	std::string cppstring(s);
+	return(isNoteFlat(cppstring));
 }
 
 uint8_t getCListValue(const uint8_t* list, uint32_t index){

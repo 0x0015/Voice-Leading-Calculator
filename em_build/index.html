@@ -3,9 +3,16 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="w3.css">	
+
+
+		<link rel="shortcut icon" href="icon.ico" type="image/x-icon">
+		<link rel="icon" href="icon.ico" type="image/x-icon">
+
+		<link rel="stylesheet" href="w3.css">
+
 		<script src="VLUtil.js"></script>
 		<script src="VLUtilWrap.js"></script>
+		<script src="UI.js"></script>
 
 		<script src="MIDI/inc/shim/Base64.js"></script>
 		<script src="MIDI/inc/shim/Base64binary.js"></script>
@@ -25,47 +32,59 @@
 	</head>
 	<body onload="setup()">
 		<div class="w3-center w3-panel w3-padding-large w3-padding-32">
-			<div class="w3-row-padding">
-				<div class="w3-container w3-half">
+			<div class="w3-container">
 					<table class="w3-table">
 						<tr>
-						<th><text>First Chord: </text></th>
-						<th><input type="text" class="c1n1 w3-input"></input></th>
-						<th><input type="text" class="c1n2 w3-input"></input></th>
-						<th><input type="text" class="c1n3 w3-input"></input></th>
-						<th><input type="text" class="c1n4 w3-input"></input></th>
-						<th><input type="text" class="c1n5 w3-input"></input></th>
-						<th><input type="text" class="c1n6 w3-input"></input></th>
+						<td><H4>First Chord: </H4></td>
+						<td><H4>Second Chord: </H4></td>
 						</tr>
 						<tr>
-						<th><text>Second Chord: </text></th>
-						<th><input type="text" class="c2n1 w3-input"></input></th>
-						<th><input type="text" class="c2n2 w3-input"></input></th>
-						<th><input type="text" class="c2n3 w3-input"></input></th>
-						<th><input type="text" class="c2n4 w3-input"></input></th>
-						<th><input type="text" class="c2n5 w3-input"></input></th>
-						<th><input type="text" class="c2n6 w3-input"></input></th>
+						<td><button class="sortChord1 w3-button w3-light-grey" onclick="sortChord1()">Sort</button></td>
+						<td><button class="sortChord2 w3-button w3-light-grey" onclick="sortChord2()">Sort</button></td>
+						</tr>
+						<tr>
+						<td><input type="text" class="c1n6 w3-input" onchange="onNoteChange()"></input></td>
+						<td><input type="text" class="c2n6 w3-input" onchange="onNoteChange()"></input></td>
+						</tr>
+						<tr>
+						<td><input type="text" class="c1n5 w3-input" onchange="onNoteChange()"></input></td>
+						<td><input type="text" class="c2n5 w3-input" onchange="onNoteChange()"></input></td>
+						</tr>
+						<tr>
+						<td><input type="text" class="c1n4 w3-input" onchange="onNoteChange()"></input></td>
+						<td><input type="text" class="c2n4 w3-input" onchange="onNoteChange()"></input></td>
+						</tr>
+						<tr>
+						<td><input type="text" class="c1n3 w3-input" onchange="onNoteChange()"></input></td>
+						<td><input type="text" class="c2n3 w3-input" onchange="onNoteChange()"></input></td>
+						</tr>
+						<tr>
+						<td><input type="text" class="c1n2 w3-input" onchange="onNoteChange()"></input></td>
+						<td><input type="text" class="c2n2 w3-input" onchange="onNoteChange()"></input></td>
+						</tr>
+						<tr>
+						<td><input type="text" class="c1n1 w3-input" onchange="onNoteChange()"></input></td>
+						<td><input type="text" class="c2n1 w3-input" onchange="onNoteChange()"></input></td>
+						</tr>
+						<tr>
+						<td><button class="playChord1 w3-button w3-light-grey" onclick="playChord1()">Play</button></td>
+						<td><button class="playChord2 w3-button w3-light-grey" onclick="playChord2()">Play</button></td>
 						</tr>
 					</table>
-				</div>
-			
-				<div class="w3-container w3-half w3-left">
+					<br>
 					<table class="w3-table">
 						<tr>
-						<th><button class="scoreButton w3-button w3-light-grey" onclick="scoreChordButtonClick()">Score Chord</button></th>
-						<th><button class="playChord1 w3-button w3-light-grey" onclick="playChord1()">Play chord 1</button></th>
-
-						<th><text class="scoreButtonResult"></text></th>
+						<th><H4 class="scoreButtonResult"></H4></th>
 						</tr>
 						<tr>
 						<th><button class="optimizeButton w3-button w3-light-grey" onclick="optimizeChordButtonClick()">Optimize Chord</button></th>
-						<th><button class="playChord2 w3-button w3-light-grey" onclick="playChord2()">Play Chord 2</button></th>
+						</tr>
+						<tr>
 						<th><text class="optimizeButtonResult"></text>
-							<button class="playOptimizedChord w3-button w3-light-grey" onclick="playOptimizedChord()">Play</button>
+						<button class="playOptimizedChord w3-button w3-light-grey" onclick="playOptimizedChord()">Play</button>
 						</th>
 						</tr>
 					</table>
-				</div>
 			</div>
 		</div>
 	</body>
