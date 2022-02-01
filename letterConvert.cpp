@@ -5,7 +5,40 @@ constexpr unsigned int str2int(const char* str, int h = 0)
     return !str[h] ? 5381 : (str2int(str, h+1) * 33) ^ str[h];
 }
 
-uint8_t noteFromLetter(std::string letter){
+std::string setFirstLetter(std::string base, std::string letter){
+	std::string output1 = base.substr(1, base.length());
+	std::string output = letter;
+	output.append(output1);
+	return(output);
+}
+
+std::string sanatizeFirstNote(std::string letter){
+	if(letter.length() == 0){
+		return("");
+	}
+	switch(letter[0]){
+		case 'c':
+			return(setFirstLetter(letter, "C"));
+		case 'd':
+			return(setFirstLetter(letter, "D"));
+		case 'e':
+			return(setFirstLetter(letter, "E"));
+		case 'f':
+			return(setFirstLetter(letter, "F"));
+		case 'g':
+			return(setFirstLetter(letter, "G"));
+		case 'a':
+			return(setFirstLetter(letter, "A"));
+		case 'B':
+			return(setFirstLetter(letter, "B"));
+		default:
+			return(letter);
+	}
+	return(letter);
+}
+
+uint8_t noteFromLetter(std::string letterUnsanitized){
+	std::string letter = sanatizeFirstNote(letterUnsanitized);
 	int letterOnly;
 	int numberFrom = 1;
 	if(letter.find("-") != std::string::npos){
