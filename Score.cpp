@@ -30,19 +30,29 @@ std::vector<uint8_t> Score::sortChord(std::vector<uint8_t>& chord){
 
 unsigned int Score::scoreRanges(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2){
 	if(chord1.size() != chord2.size()){
-		std::cout<<"comparing ranges of scores of unequal size"<<std::endl;
-		return(0);
+		std::cout<<"Comparing ranges of scores of unequal size.  Unable to match notes."<<std::endl;
+		unsigned int output = 0;
+		for(int i=0;i<chord2.size();i++){
+			unsigned int chord2Min = std::numeric_limits<unsigned int>::max();
+			for(int j=0;j<chord1.size();j++){
+				unsigned int newDistence = (unsigned int)(std::abs(((int)chord1[j])-((int)chord2[i])));
+				if(newDistence<chord2Min){
+					chord2Min = newDistence;
+				}
+			}
+			output+=chord2Min;
+		}
+		return(output);
+	}
+	std::vector<uint8_t> chord1S = sortChord(chord1);
+	std::vector<uint8_t> chord2S = sortChord(chord2);
+	if(chord1S.size() != chord2S.size()){
+		return(scoreRanges(chord1S, chord2S));
 	}
 	unsigned int output = 0;
-	for(int i=0;i<chord2.size();i++){
-		unsigned int chord2Min = std::numeric_limits<unsigned int>::max();
-		for(int j=0;j<chord1.size();j++){
-			unsigned int newDistence = (unsigned int)(std::abs(((int)chord1[j])-((int)chord2[i])));
-			if(newDistence<chord2Min){
-				chord2Min = newDistence;
-			}
-		}
-		output+=chord2Min;
+	for(int i=0;i<chord1S.size();i++){
+		output += (unsigned int)(std::abs(((int)chord1S[i])-((int)chord2S[i])));
+
 	}
 	return(output);
 }
