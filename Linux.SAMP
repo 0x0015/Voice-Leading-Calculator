@@ -1,0 +1,6 @@
+CXX : g++
+OUT : main
+BUILD_CXX_FLAGS : -Wall -std=c++17 -g
+LINK_OPTS :  
+PLATFORM_OBJS : main.cpp.o ArguementHandler/ArgHandle.cpp.o ArguementHandler/Arguement.cpp.o
+EXTRA_CLEAN : 

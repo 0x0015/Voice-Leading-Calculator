@@ -1,0 +1,21 @@
+OBJS	= Score.cpp.o\
+	  letterConvert.cpp.o\
+	  {PLATFORM_OBJS}
+
+OUT	= {OUT}
+CXX	= {CXX}
+BUILD_CXX_FLAGS	 = {BUILD_CXX_FLAGS}
+LINK_OPTS	 = {LINK_OPTS}
+
+all: $(OBJS)
+	$(CXX) -g $(OBJS) -o $(OUT) $(LINK_OPTS)
+
+
+%.cpp.o: %.cpp
+	$(CXX) $< $(BUILD_CXX_FLAGS) -g -c -o $@
+
+clean:
+	rm -f $(OBJS) $(OUT) {EXTRA_CLEAN}
+
+em:
+	em++ letterConvert.cpp Score.cpp emscripten.cpp -o em_build/VLUtil.js -std=c++17 -s WASM=1 -s EXPORTED_RUNTIME_METHODS=ccall,cwrap -s ASSERTIONS=1

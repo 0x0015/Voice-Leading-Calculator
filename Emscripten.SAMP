@@ -1,0 +1,6 @@
+CXX : em++
+OUT : em_build/VLUtil.js
+BUILD_CXX_FLAGS : -std=c++17
+LINK_OPTS : -s WASM=1 -s EXPORTED_RUNTIME_METHODS=ccall,cwrap -s ASSERTIONS=1
+PLATFORM_OBJS : emscripten.cpp.o
+EXTRA_CLEAN : em_build/VLUtil.wasm
