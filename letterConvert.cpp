@@ -29,7 +29,7 @@ std::string sanatizeFirstNote(std::string letter){
 			return(setFirstLetter(letter, "G"));
 		case 'a':
 			return(setFirstLetter(letter, "A"));
-		case 'B':
+		case 'b':
 			return(setFirstLetter(letter, "B"));
 		default:
 			return(letter);
