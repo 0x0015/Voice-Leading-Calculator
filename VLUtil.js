@@ -4984,6 +4984,12 @@ var _optimizeChord = Module["_optimizeChord"] = createExportWrapper("optimizeCho
 var _scoreChord = Module["_scoreChord"] = createExportWrapper("scoreChord");
 
 /** @type {function(...*):?} */
+var _getOptimizedChord = Module["_getOptimizedChord"] = createExportWrapper("getOptimizedChord");
+
+/** @type {function(...*):?} */
+var _getOptimizedChordLen = Module["_getOptimizedChordLen"] = createExportWrapper("getOptimizedChordLen");
+
+/** @type {function(...*):?} */
 var ___errno_location = Module["___errno_location"] = createExportWrapper("__errno_location");
 
 /** @type {function(...*):?} */
