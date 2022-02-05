@@ -4,7 +4,9 @@
 #include <emscripten.h>
 
 extern "C" {
-	uint8_t* EMSCRIPTEN_KEEPALIVE optimizeChord(const uint8_t* chord1, uint32_t chord1len, const uint8_t* chord2, uint32_t chord2len);
+	uint32_t EMSCRIPTEN_KEEPALIVE optimizeChord(const uint8_t* chord1, uint32_t chord1len, const uint8_t* chord2, uint32_t chord2len);
+	uint8_t* EMSCRIPTEN_KEEPALIVE getOptimizedChord(uint32_t index);
+	uint32_t EMSCRIPTEN_KEEPALIVE getOptimizedChordLen(uint32_t index);
 	uint32_t EMSCRIPTEN_KEEPALIVE scoreChord(const uint8_t* chord1, uint32_t chord1len, const uint8_t* chord2, uint32_t chord2len);
 	uint8_t EMSCRIPTEN_KEEPALIVE getCListValue(const uint8_t* list, uint32_t index);
 	uint8_t EMSCRIPTEN_KEEPALIVE getNumberFromLetter(const char* string);
@@ -54,16 +56,32 @@ uint8_t getCListValue(const uint8_t* list, uint32_t index){
 	return(list[index]);
 }
 
-uint8_t* optimizeChord(const uint8_t* chord1, uint32_t chord1len, const uint8_t* chord2, uint32_t chord2len){
+std::vector<std::vector<uint8_t>> lastOptimizedChord;
+
+uint32_t optimizeChord(const uint8_t* chord1, uint32_t chord1len, const uint8_t* chord2, uint32_t chord2len){
 		std::vector<uint8_t> c1(chord1, chord1+chord1len);
 		std::vector<uint8_t> c2(chord2, chord2+chord2len);
-		std::vector<uint8_t> output = Score::optimizeScore(c1, c2);
-		uint8_t* array = new uint8_t[output.size()];
-		std::memcpy(array, output.data(), output.size());
-		return(array);
+		lastOptimizedChord = Score::optimizeScore(c1, c2);
+		return(lastOptimizedChord.size());
 	}
-	unsigned int scoreChord(const uint8_t* chord1, uint32_t chord1len, const uint8_t* chord2, uint32_t chord2len){
+unsigned int scoreChord(const uint8_t* chord1, uint32_t chord1len, const uint8_t* chord2, uint32_t chord2len){
 		std::vector<uint8_t> c1(chord1, chord1+chord1len);
 		std::vector<uint8_t> c2(chord2, chord2+chord2len);
 		return(Score::scoreAll(c1, c2));
 	}
+
+uint8_t* getOptimizedChord(uint32_t index){
+	if(index >= lastOptimizedChord.size()){
+		return new uint8_t[1];
+	}
+	uint8_t* array = new uint8_t[lastOptimizedChord[index].size()];
+	std::memcpy(array, lastOptimizedChord[index].data(), lastOptimizedChord[index].size());
+	return(array);
+}
+
+uint32_t getOptimizedChordLen(uint32_t index){
+	if(index >= lastOptimizedChord.size()){
+		return 0;
+	}
+	return(lastOptimizedChord[index].size());
+}

@@ -31,11 +31,13 @@ int main(int argc, char** argv){
 		}
 	}
 	std::cout<<"Range score: "<<Score::scoreRanges(chord1, chord2)<<std::endl;
-	std::vector<uint8_t> bestChord = Score::optimizeScore(chord1, chord2);
+	auto bestChords = Score::optimizeScore(chord1, chord2);
+	for(auto& bestChord : bestChords){
 	std::cout<<"Best score: "<<Score::scoreRanges(chord1, bestChord)<<" with ";
 	Score::printChord(bestChord);
 	std::cout<<".  (chord1 = ";
 	Score::printChord(chord1);
 	std::cout<<")"<<std::endl;
+	}
 	return(0);
 }

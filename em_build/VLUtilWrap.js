@@ -1,5 +1,7 @@
 scoreChordWrap = Module.cwrap('scoreChord', 'number', ['array', 'number', 'array', 'number']);
-optimizeChordWrap = Module.cwrap('optimizeChord', '[number]', ['array', 'number', 'array', 'number']);
+optimizeChordWrap = Module.cwrap('optimizeChord', 'number', ['array', 'number', 'array', 'number']);
+getOptimizedChordWrap = Module.cwrap('getOptimizedChord', '[number]', ['number']);
+getOptimizedChordLenWrap = Module.cwrap('getOptimizedChordLen', 'number', 'number');
 getCListValueWrap = Module.cwrap('getCListValue', 'number', ['number', 'number']);
 getNumberFromLetterWrap = Module.cwrap('getNumberFromLetter', 'number', ['array']);
 strlenWrap = Module.cwrap('strlen_r', 'number', 'number');
@@ -12,10 +14,16 @@ function scoreChord(chord1, chord2){
 	return(scoreChordWrap(chord1, chord1.length, chord2, chord2.length));
 }
 function optimizeChord(chord1, chord2){
-	var listPtr = optimizeChordWrap(chord1, chord1.length, chord2, chord2.length);
-	
-	var myTypedArray = new Uint8Array(chord2.length);
-	for(var i=0;i<chord2.length;i++){
+	return optimizeChordWrap(chord1, chord1.length, chord2, chord2.length);
+}
+function getOptimizedChord(index){	
+	var listPtr = getOptimizedChordWrap(index);
+	var listLen = getOptimizedChordLenWrap(index);
+	if(listPtr == 0 || listLen == 0){
+		return(new Uint8Array(0));
+	}
+	var myTypedArray = new Uint8Array(listLen);
+	for(var i=0;i<listLen;i++){
 		myTypedArray[i] = getCListValueWrap(listPtr, i);
 	}
 	freeWrap(listPtr);

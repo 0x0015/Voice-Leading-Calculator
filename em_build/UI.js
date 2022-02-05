@@ -39,13 +39,9 @@ function setChordnL(chordNumber, notes){
 		cn[0].value = notes[i-1];
 	}
 }
-
-function optimizeChordButtonClick(){
-	var scoreText = document.getElementsByClassName("optimizeButtonResult")[0];
-	var chord1 = getChordn(1);
-	var chord2 = getChordn(2);
-	var score = optimizeChord(chord1, chord2);
-	var scoreVal = scoreChord(chord1, score);
+function showOptimizedChord(index){
+	var score = getOptimizedChord(index);
+	var scoreVal = scoreChord(getChordn(1), score);
 	var resultText = "Result: ";
 	for(var i=0;i<score.length;i++){
 		var note = getLetterFromNumber(score[i]);
@@ -55,11 +51,49 @@ function optimizeChordButtonClick(){
 		}
 	}
 	resultText += ", Score: " + scoreVal;
+	var scoreText = document.getElementsByClassName("optimizeButtonResult")[0];
 	scoreText.innerHTML = resultText;
 	lastOptimizedChord = score;
 	document.getElementsByClassName("playOptimizedChord")[0].style.display = "";
+	document.getElementsByClassName("nextChordButton")[0].style.display = "";
+	document.getElementsByClassName("previousChordButton")[0].style.display = "";
+	document.getElementsByClassName("previousChordButton")[0].disabled = true;
 }
-
+var currentChordIndex = 0;
+var currentChordIndexMax = 0;
+function optimizeChordButtonClick(){
+	var chord1 = getChordn(1);
+	var chord2 = getChordn(2);
+	currentChordIndexMax = optimizeChord(chord1, chord2);
+	currentChordIndex = 0;
+	showOptimizedChord(currentChordIndex);
+}
+function nextChordButtonClick(){
+	if(currentChordIndex < currentChordIndexMax){
+		currentChordIndex++;
+		showOptimizedChord(currentChordIndex);
+		if(currentChordIndex+1>=currentChordIndexMax){
+			document.getElementsByClassName("nextChordButton")[0].disabled = true;
+		}else{
+			document.getElementsByClassName("nextChordButton")[0].disabled = false;
+		}
+		document.getElementsByClassName("previousChordButton")[0].disabled = false;
+		playOptimizedChord();
+	}
+}
+function previousChordButtonClick(){
+	if(currentChordIndex > 0){
+		currentChordIndex--;
+		showOptimizedChord(currentChordIndex);
+		if(currentChordIndex-1<0){
+			document.getElementsByClassName("previousChordButton")[0].disabled = true;
+		}else{
+			document.getElementsByClassName("previousChordButton")[0].disabled = false;
+		}
+		document.getElementsByClassName("nextChordButton")[0].disabled = false;
+		playOptimizedChord();
+	}
+}
 function playChord1(){
 	var chord1 = getChordn(1);
 	playNotes(chord1, 127, 1);
@@ -134,8 +168,9 @@ function setup(){
 		c2n[0].style.width = inputStyle;
 	}
 	document.getElementsByClassName("playOptimizedChord")[0].style.display = "none";
+	document.getElementsByClassName("previousChordButton")[0].style.display = "none";
+	document.getElementsByClassName("nextChordButton")[0].style.display = "none";
 
-	
 	PlayerInit();
 }
 
