@@ -9,10 +9,14 @@ function strip(string) {
 function getChordn(chordNumber){
 	let output = [];
 	for(var i=1;i<=notesPerChord;i++){
-		var cn = document.getElementsByClassName("c" + chordNumber + "n" + i);
-		var cnNote = getNumberFromLetter(cn[0].value);
-		if(!(cnNote === 0 || strip(cn[0].value) === "")){
-			output.push(cnNote);
+		var cnl = document.getElementsByClassName("c" + chordNumber + "n" + i + "l");
+		var cnn = document.getElementsByClassName("c" + chordNumber + "n" + i + "n");
+		var letterActually = cnl[0].value + cnn[0].value;
+		if(!(strip(cnl[0].value) === "" || strip(cnn[0].value) === "")){
+			var cnNote = getNumberFromLetter(letterActually);
+			if(!(cnNote === 0 || strip(letterActually) === "")){
+				output.push(cnNote);
+			}
 		}
 	}
 	return(output);
@@ -21,9 +25,11 @@ function getChordn(chordNumber){
 function getChordnL(chordNumber){
 	let output = [];
 	for(var i=1;i<=notesPerChord;i++){
-		var cn = document.getElementsByClassName("c" + chordNumber + "n" + i);
-		if(!(strip(cn[0].value) === "")){
-			output.push(strip(cn[0].value));
+		var cnl = document.getElementsByClassName("c" + chordNumber + "n" + i + "l");
+		var cnn = document.getElementsByClassName("c" + chordNumber + "n" + i + "n");
+		var letterActually = cnl[0].value + cnn[0].value;
+		if(!((strip(letterActually) === "") || strip(cnl[0].value) === "" || strip(cnn[0].value) === "")){
+			output.push(strip(letterActually));
 		}
 	}
 	return(output);
@@ -31,12 +37,16 @@ function getChordnL(chordNumber){
 
 function setChordnL(chordNumber, notes){
 	for(var i=1;i<=notesPerChord;i++){	
-		var cn = document.getElementsByClassName("c" + chordNumber + "n" + i);
-		cn[0].value = "";
+		var cnl = document.getElementsByClassName("c" + chordNumber + "n" + i + "l");
+		cnl[0].value = "";	
+		var cnn = document.getElementsByClassName("c" + chordNumber + "n" + i + "n");
+		cnn[0].value = "";
 	}
 	for(var i=1;i<=notesPerChord&&i<=notes.length;i++){
-		var cn = document.getElementsByClassName("c" + chordNumber + "n" + i);
-		cn[0].value = notes[i-1];
+		var cnl = document.getElementsByClassName("c" + chordNumber + "n" + i + "l");
+		cnl[0].value = notes[i-1].replace(/[1234567890-]/g, "");
+		var cnn = document.getElementsByClassName("c" + chordNumber + "n" + i + "n");
+		cnn[0].value = notes[i-1].replace(/[^1234567890-]/g, "");
 	}
 }
 function showOptimizedChord(index){
@@ -104,6 +114,12 @@ function playChord2(){
 	playNotes(chord2, 127, 1);
 }
 
+function buttonPlayNote(chord, note){
+	var chord = getChordn(chord);
+	var note = chord[note-1];
+	playNote(note, 127, 1);
+}
+
 function sortChord(chord){//super rudimentary sort.  O=n^2
 	var output = [];
 	var lastVal = -1;
@@ -162,10 +178,10 @@ function onNoteChange(){
 function setup(){
 	var inputStyle = "5ch";
 	for(var i=1;i<=notesPerChord;i++){
-		var c1n = document.getElementsByClassName("c1n" + i);
-		c1n[0].style.width = inputStyle;
-		var c2n = document.getElementsByClassName("c2n" + i);
-		c2n[0].style.width = inputStyle;
+		//var c1n = document.getElementsByClassName("c1n" + i);
+		//c1n[0].style.width = inputStyle;
+		//var c2n = document.getElementsByClassName("c2n" + i);
+		//c2n[0].style.width = inputStyle;
 	}
 	document.getElementsByClassName("playOptimizedChord")[0].style.display = "none";
 	document.getElementsByClassName("previousChordButton")[0].style.display = "none";

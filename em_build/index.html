@@ -43,30 +43,546 @@
 						<td><button class="sortChord2 w3-button w3-light-grey" onclick="sortChord2()">Sort</button></td>
 						</tr>
 						<tr>
-						<td><input type="text" class="c1n6 w3-input" onchange="onNoteChange()"></td>
-						<td><input type="text" class="c2n6 w3-input" onchange="onNoteChange()"></td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c1n6l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c1n6n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c1n6Button w3-button w3-light-grey" onclick="buttonPlayNote(1, 6)">Play</button>
+						</td>
+							</table>
+						</td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c2n6l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c2n6n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c2n6Button w3-button w3-light-grey" onclick="buttonPlayNote(2, 6)">Play</button>
+						</td>
+							</table>
+						</td>
 						</tr>
 						<tr>
-						<td><input type="text" class="c1n5 w3-input" onchange="onNoteChange()"></td>
-						<td><input type="text" class="c2n5 w3-input" onchange="onNoteChange()"></td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c1n5l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c1n5n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c1n5Button w3-button w3-light-grey" onclick="buttonPlayNote(1, 5)">Play</button>
+						</td>
+							</table>
+						</td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c2n5l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c2n5n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c2n5Button w3-button w3-light-grey" onclick="buttonPlayNote(2, 5)">Play</button>
+						</td>
+							</table>
+						</td>
 						</tr>
 						<tr>
-						<td><input type="text" class="c1n4 w3-input" onchange="onNoteChange()"></td>
-						<td><input type="text" class="c2n4 w3-input" onchange="onNoteChange()"></td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c1n4l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c1n4n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c1n4Button w3-button w3-light-grey" onclick="buttonPlayNote(1, 4)">Play</button>
+						</td>
+							</table>
+						</td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c2n4l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c2n4n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c2n4Button w3-button w3-light-grey" onclick="buttonPlayNote(2, 4)">Play</button>
+						</td>
+							</table>
+						</td>
 						</tr>
 						<tr>
-						<td><input type="text" class="c1n3 w3-input" onchange="onNoteChange()"></td>
-						<td><input type="text" class="c2n3 w3-input" onchange="onNoteChange()"></td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c1n3l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c1n3n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c1n3Button w3-button w3-light-grey" onclick="buttonPlayNote(1, 3)">Play</button>
+						</td>
+							</table>
+						</td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c2n3l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c2n3n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c2n3Button w3-button w3-light-grey" onclick="buttonPlayNote(2, 3)">Play</button>
+						</td>
+							</table>
+						</td>
 						</tr>
 						<tr>
-						<td><input type="text" class="c1n2 w3-input" onchange="onNoteChange()"></td>
-						<td><input type="text" class="c2n2 w3-input" onchange="onNoteChange()"></td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c1n2l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c1n2n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c1n2Button w3-button w3-light-grey" onclick="buttonPlayNote(1, 2)">Play</button>
+						</td>
+							</table>
+						</td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c2n2l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c2n2n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c2n2Button w3-button w3-light-grey" onclick="buttonPlayNote(2, 2)">Play</button>
+						</td>
+							</table>
+						</td>
 						</tr>
 						<tr>
-						<td><input type="text" class="c1n1 w3-input" onchange="onNoteChange()"></td>
-						<td><input type="text" class="c2n1 w3-input" onchange="onNoteChange()"></td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c1n1l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c1n1n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c1n1Button w3-button w3-light-grey" onclick="buttonPlayNote(1, 1)">Play</button>
+						</td>
+							</table>
+						</td>
+						<td>
+							<table class="w3-table w3-boarder-0">
+							<td>
+							<select class="c2n1l w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="C">C</option>
+								<option value="C#">C#</option>
+								<option value="Db">Db</option>
+								<option value="D">D</option>
+								<option value="D#">D#</option>
+								<option value="Eb">Eb</option>
+								<option value="E">E</option>
+								<option value="F">F</option>
+								<option value="F#">F#</option>
+								<option value="Gb">Gb</option>
+								<option value="G">G</option>
+								<option value="G#">G#</option>
+								<option value="Ab">Ab</option>
+								<option value="A">A</option>
+								<option value="A#">A#</option>
+								<option value="Bb">Bb</option>
+								<option value="B">B</option>
+							</select>
+							</td>
+							<td>
+							<select class="c2n1n w3-select" onchange="onNoteChange()">
+								<option value=""></option>
+								<option value="-1">-1</option>
+								<option value="0">0</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+							</td>
+						<td>
+							<button class="c2n1Button w3-button w3-light-grey" onclick="buttonPlayNote(2, 1)">Play</button>
+						</td>
+							</table>
+						</td>
 						</tr>
-						<tr>
+						<tr>	
 						<td><button class="playChord1 w3-button w3-light-grey" onclick="playChord1()">Play</button></td>
 						<td><button class="playChord2 w3-button w3-light-grey" onclick="playChord2()">Play</button></td>
 						</tr>
