@@ -1,64 +1,11 @@
-scoreChordWrap = Module.cwrap('scoreChord', 'number', ['array', 'number', 'array', 'number']);
-optimizeChordWrap = Module.cwrap('optimizeChord', 'number', ['array', 'number', 'array', 'number']);
-getOptimizedChordWrap = Module.cwrap('getOptimizedChord', '[number]', ['number']);
-getOptimizedChordLenWrap = Module.cwrap('getOptimizedChordLen', 'number', 'number');
-getCListValueWrap = Module.cwrap('getCListValue', 'number', ['number', 'number']);
-getNumberFromLetterWrap = Module.cwrap('getNumberFromLetter', 'number', ['array']);
-strlenWrap = Module.cwrap('strlen_r', 'number', 'number');
-getLetterFromNumberWrap = Module.cwrap('getLetterFromNumber', '[number]', ['number']);
-getLetterFromNumber_LenWrap = Module.cwrap('getLetterFromNumber_Len', 'number', ['number']);
-freeWrap = Module.cwrap('freeArr', '', 'number');
-noteFlatWrap = Module.cwrap('noteFlat', 'number', ['array']);
-
-function scoreChord(chord1, chord2){
-	return(scoreChordWrap(chord1, chord1.length, chord2, chord2.length));
-}
-function optimizeChord(chord1, chord2){
-	return optimizeChordWrap(chord1, chord1.length, chord2, chord2.length);
-}
-function getOptimizedChord(index){	
-	var listPtr = getOptimizedChordWrap(index);
-	var listLen = getOptimizedChordLenWrap(index);
-	if(listPtr == 0 || listLen == 0){
-		return(new Uint8Array(0));
-	}
-	var myTypedArray = new Uint8Array(listLen);
-	for(var i=0;i<listLen;i++){
-		myTypedArray[i] = getCListValueWrap(listPtr, i);
-	}
-	freeWrap(listPtr);
-	return(myTypedArray);
-}
-function string2cstring(inputStr){
-	let output = [];
-	for(var i=0;i<inputStr.length;i++){
-		output.push(inputStr.charCodeAt(i));
-	}
-	output.push(0);
-	return(output);
-}
-function cstring2string(inputCStr, strLength = 0){
-	if(length === 0){
-		var strLength = strlenWrap(inputCStr);
-	}
-	var myTypedArray = new Uint8Array(strLength);
-	for(var i=0;i<strLength;i++){
-		myTypedArray[i] = getCListValueWrap(inputCStr, i);
-	}
-	var output = String.fromCharCode(...myTypedArray);
-	delete myTypedArray;
-	return(output);
-}
-function getLetterFromNumber(inputNum){
-	var strPtr = getLetterFromNumberWrap(inputNum);
-	var strLength = getLetterFromNumber_LenWrap(inputNum);
-	var output = cstring2string(strPtr, strLength);
-	freeWrap(strPtr);
-	return(output);
-}
-function getNumberFromLetter(inputLet){
-	return(getNumberFromLetterWrap(string2cstring(inputLet)));
-}
-function noteFlat(note){
-	return(noteFlatWrap(string2cstring(note)));
-}
+optimizeChordButtonClick = Module.cwrap('optimizeChordButtonClick', '', []);
+nextChordButtonClick = Module.cwrap('nextChordButtonClick', '', []);
+previousChordButtonClick = Module.cwrap('previousChordButtonClick', '', []);
+onNoteChange = Module.cwrap('onNoteChange', '', []);
+setup = Module.cwrap('setup', '', []);
+playChord1 = Module.cwrap('playChord1', '', []);
+playChord2 = Module.cwrap('playChord2', '', []);
+buttonPlayNote = Module.cwrap('buttonPlayNote', '', ['number', 'number']);
+playOptimizedChord = Module.cwrap('playOptimizedChord', '', []);
+sortChord1 = Module.cwrap('sortChord1', '', []);
+sortChord2 = Module.cwrap('sortChord2', '', []);

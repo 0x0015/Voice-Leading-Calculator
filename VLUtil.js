@@ -773,10 +773,6 @@ function cwrap(ident, returnType, argTypes, opts) {
 
 // We used to include malloc/free by default in the past. Show a helpful error in
 // builds with assertions.
-function _free() {
-  // Show a helpful error since we used to include free by default in the past.
-  abort("free() called but not included in the build - add '_free' to EXPORTED_FUNCTIONS");
-}
 
 var ALLOC_NORMAL = 0; // Tries to use _malloc()
 var ALLOC_STACK = 1; // Lives for the duration of the current function call
@@ -1305,6 +1301,7 @@ function checkStackCookie() {
 // end include: runtime_assertions.js
 var __ATPRERUN__  = []; // functions called before the runtime is initialized
 var __ATINIT__    = []; // functions called during startup
+var __ATMAIN__    = []; // functions called when main() is to be run
 var __ATEXIT__    = []; // functions called during shutdown
 var __ATPOSTRUN__ = []; // functions called after the main() is called
 
@@ -1342,6 +1339,12 @@ TTY.init();
   callRuntimeCallbacks(__ATINIT__);
 }
 
+function preMain() {
+  checkStackCookie();
+  
+  callRuntimeCallbacks(__ATMAIN__);
+}
+
 function exitRuntime() {
   checkStackCookie();
   runtimeExited = true;
@@ -1366,6 +1369,10 @@ function addOnPreRun(cb) {
 
 function addOnInit(cb) {
   __ATINIT__.unshift(cb);
+}
+
+function addOnPreMain(cb) {
+  __ATMAIN__.unshift(cb);
 }
 
 function addOnExit(cb) {
@@ -1716,7 +1723,29 @@ var tempI64;
 var ASM_CONSTS = {
   
 };
-
+function Element_AssignChildElement(hash,newHash,index){ JS_Man["A" + newHash] = JS_Man["A" + hash].children[index]; }
+function Element_AssignListElement(hash,newHash,index){ JS_Man["A" + newHash] = JS_Man["A" + hash][index]; }
+function Element_callOnclick(hash){ JS_Man["A" + hash].onclick(); }
+function Element_getById(hash,id){ JS_Man["A" + hash] = document.getElementById(UTF8ToString(id)); }
+function Element_getChildCount(hash){ return(JS_Man["A" + hash].childElementCount); }
+function Element_getClassNameLength(hash,classname){ JS_Man["A" + hash] = document.getElementsByClassName(UTF8ToString(classname)); return(JS_Man["A" + hash].length); }
+function Element_getDisabled(hash){ return(JS_Man["A" + hash].disabled); }
+function Element_getInnerHTML(hash,id,length){ stringToUTF8(JS_Man["A" + hash].innerHTML, id, length+1); }
+function Element_getInnerHTMLLen(hash){ return(lengthBytesUTF8(JS_Man["A" + hash].innerHTML)); }
+function Element_getStyle(hash,whatStyle,str,len){ stringToUTF8(JS_Man["A" + hash].style[UTF8ToString(whatStyle)], str, len+1); }
+function Element_getStyleLen(hash,whatStyle){ return(lengthBytesUTF8(JS_Man["A" + hash].style[UTF8ToString(whatStyle)])); }
+function Element_getVal(hash,id,length){ stringToUTF8(JS_Man["A" + hash].value, id, length+1); }
+function Element_getValLen(hash){ return(lengthBytesUTF8(JS_Man["A" + hash].value)); }
+function Element_setDisabled(hash,value){ JS_Man["A" + hash].disabled = value; }
+function Element_setInnerHTML(hash,id){ JS_Man["A" + hash].innerHTML = UTF8ToString(id); }
+function Element_setOnclick(hash,funcHash){ JS_Man["A" + hash].onclick = function(){ var callStdFuncWrap = Module.cwrap('callStdFunc', '', 'number'); callStdFuncWrap(funcHash); } }
+function Element_setStyle(hash,whatStyle,value){ JS_Man["A" + hash].style[UTF8ToString(whatStyle)] = UTF8ToString(value); }
+function Element_setVal(hash,id){ JS_Man["A" + hash].value = UTF8ToString(id); }
+function JS_Man_allocateVar(hash){ JS_Man["A" + hash] = undefined; }
+function JS_Man_construct(){ window.JS_Man = {}; }
+function JS_Man_evalJS(code){ let func = new Function(UTF8ToString(code)); func(); }
+function JS_Man_freeVar(hash){ return(delete JS_Man["A" + hash]); }
+function Player_playNote(note,velocity,length){ playNote(note, velocity, length); }
 
 
 
@@ -1883,10 +1912,193 @@ var ASM_CONSTS = {
         return prev === 1;
       };
     }
+  function CatchInfo(ptr) {
   
-  var exceptionLast = 0;
+      this.free = function() {
+        _free(this.ptr);
+        this.ptr = 0;
+      };
+  
+      this.set_base_ptr = function(basePtr) {
+        HEAP32[((this.ptr)>>2)] = basePtr;
+      };
+  
+      this.get_base_ptr = function() {
+        return HEAP32[((this.ptr)>>2)];
+      };
+  
+      this.set_adjusted_ptr = function(adjustedPtr) {
+        HEAP32[(((this.ptr)+(4))>>2)] = adjustedPtr;
+      };
+  
+      this.get_adjusted_ptr_addr = function() {
+        return this.ptr + 4;
+      }
+  
+      this.get_adjusted_ptr = function() {
+        return HEAP32[(((this.ptr)+(4))>>2)];
+      };
+  
+      // Get pointer which is expected to be received by catch clause in C++ code. It may be adjusted
+      // when the pointer is casted to some of the exception object base classes (e.g. when virtual
+      // inheritance is used). When a pointer is thrown this method should return the thrown pointer
+      // itself.
+      this.get_exception_ptr = function() {
+        // Work around a fastcomp bug, this code is still included for some reason in a build without
+        // exceptions support.
+        var isPointer = ___cxa_is_pointer_type(
+          this.get_exception_info().get_type());
+        if (isPointer) {
+          return HEAP32[((this.get_base_ptr())>>2)];
+        }
+        var adjusted = this.get_adjusted_ptr();
+        if (adjusted !== 0) return adjusted;
+        return this.get_base_ptr();
+      };
+  
+      this.get_exception_info = function() {
+        return new ExceptionInfo(this.get_base_ptr());
+      };
+  
+      if (ptr === undefined) {
+        this.ptr = _malloc(8);
+        this.set_adjusted_ptr(0);
+      } else {
+        this.ptr = ptr;
+      }
+    }
+  
+  var exceptionCaught =  [];
+  
+  function exception_addRef(info) {
+      info.add_ref();
+    }
   
   var uncaughtExceptionCount = 0;
+  function ___cxa_begin_catch(ptr) {
+      var catchInfo = new CatchInfo(ptr);
+      var info = catchInfo.get_exception_info();
+      if (!info.get_caught()) {
+        info.set_caught(true);
+        uncaughtExceptionCount--;
+      }
+      info.set_rethrown(false);
+      exceptionCaught.push(catchInfo);
+      exception_addRef(info);
+      return catchInfo.get_exception_ptr();
+    }
+
+  var exceptionLast = 0;
+  
+  function ___cxa_free_exception(ptr) {
+      try {
+        return _free(new ExceptionInfo(ptr).ptr);
+      } catch(e) {
+        err('exception during cxa_free_exception: ' + e);
+      }
+    }
+  function exception_decRef(info) {
+      // A rethrown exception can reach refcount 0; it must not be discarded
+      // Its next handler will clear the rethrown flag and addRef it, prior to
+      // final decRef and destruction here
+      if (info.release_ref() && !info.get_rethrown()) {
+        var destructor = info.get_destructor();
+        if (destructor) {
+          // In Wasm, destructors return 'this' as in ARM
+          getWasmTableEntry(destructor)(info.excPtr);
+        }
+        ___cxa_free_exception(info.excPtr);
+      }
+    }
+  function ___cxa_end_catch() {
+      // Clear state flag.
+      _setThrew(0);
+      assert(exceptionCaught.length > 0);
+      // Call destructor if one is registered then clear it.
+      var catchInfo = exceptionCaught.pop();
+  
+      exception_decRef(catchInfo.get_exception_info());
+      catchInfo.free();
+      exceptionLast = 0; // XXX in decRef?
+    }
+
+  function ___resumeException(catchInfoPtr) {
+      var catchInfo = new CatchInfo(catchInfoPtr);
+      var ptr = catchInfo.get_base_ptr();
+      if (!exceptionLast) { exceptionLast = ptr; }
+      catchInfo.free();
+      throw ptr + " - Exception catching is disabled, this exception cannot be caught. Compile with -s NO_DISABLE_EXCEPTION_CATCHING or -s EXCEPTION_CATCHING_ALLOWED=[..] to catch.";
+    }
+  function ___cxa_find_matching_catch_2() {
+      var thrown = exceptionLast;
+      if (!thrown) {
+        // just pass through the null ptr
+        setTempRet0(0); return ((0)|0);
+      }
+      var info = new ExceptionInfo(thrown);
+      var thrownType = info.get_type();
+      var catchInfo = new CatchInfo();
+      catchInfo.set_base_ptr(thrown);
+      catchInfo.set_adjusted_ptr(thrown);
+      if (!thrownType) {
+        // just pass through the thrown ptr
+        setTempRet0(0); return ((catchInfo.ptr)|0);
+      }
+      var typeArray = Array.prototype.slice.call(arguments);
+  
+      // can_catch receives a **, add indirection
+      // The different catch blocks are denoted by different types.
+      // Due to inheritance, those types may not precisely match the
+      // type of the thrown object. Find one which matches, and
+      // return the type of the catch block which should be called.
+      for (var i = 0; i < typeArray.length; i++) {
+        var caughtType = typeArray[i];
+        if (caughtType === 0 || caughtType === thrownType) {
+          // Catch all clause matched or exactly the same type is caught
+          break;
+        }
+        if (___cxa_can_catch(caughtType, thrownType, catchInfo.get_adjusted_ptr_addr())) {
+          setTempRet0(caughtType); return ((catchInfo.ptr)|0);
+        }
+      }
+      setTempRet0(thrownType); return ((catchInfo.ptr)|0);
+    }
+
+  function ___cxa_find_matching_catch_3() {
+      var thrown = exceptionLast;
+      if (!thrown) {
+        // just pass through the null ptr
+        setTempRet0(0); return ((0)|0);
+      }
+      var info = new ExceptionInfo(thrown);
+      var thrownType = info.get_type();
+      var catchInfo = new CatchInfo();
+      catchInfo.set_base_ptr(thrown);
+      catchInfo.set_adjusted_ptr(thrown);
+      if (!thrownType) {
+        // just pass through the thrown ptr
+        setTempRet0(0); return ((catchInfo.ptr)|0);
+      }
+      var typeArray = Array.prototype.slice.call(arguments);
+  
+      // can_catch receives a **, add indirection
+      // The different catch blocks are denoted by different types.
+      // Due to inheritance, those types may not precisely match the
+      // type of the thrown object. Find one which matches, and
+      // return the type of the catch block which should be called.
+      for (var i = 0; i < typeArray.length; i++) {
+        var caughtType = typeArray[i];
+        if (caughtType === 0 || caughtType === thrownType) {
+          // Catch all clause matched or exactly the same type is caught
+          break;
+        }
+        if (___cxa_can_catch(caughtType, thrownType, catchInfo.get_adjusted_ptr_addr())) {
+          setTempRet0(caughtType); return ((catchInfo.ptr)|0);
+        }
+      }
+      setTempRet0(thrownType); return ((catchInfo.ptr)|0);
+    }
+
   function ___cxa_throw(ptr, type, destructor) {
       var info = new ExceptionInfo(ptr);
       // Initialize ExceptionInfo content after it was allocated in __cxa_allocate_exception.
@@ -1895,6 +2107,7 @@ var ASM_CONSTS = {
       uncaughtExceptionCount++;
       throw ptr + " - Exception catching is disabled, this exception cannot be caught. Compile with -s NO_DISABLE_EXCEPTION_CATCHING or -s EXCEPTION_CATCHING_ALLOWED=[..] to catch.";
     }
+
 
   function _abort() {
       abort('native code called abort()');
@@ -4373,6 +4586,10 @@ var ASM_CONSTS = {
   }
   }
 
+  function _getTempRet0() {
+      return getTempRet0();
+    }
+
   function _setTempRet0(val) {
       setTempRet0(val);
     }
@@ -4938,8 +5155,36 @@ function intArrayToString(array) {
 
 
 var asmLibraryArg = {
+  "Element_AssignChildElement": Element_AssignChildElement,
+  "Element_AssignListElement": Element_AssignListElement,
+  "Element_callOnclick": Element_callOnclick,
+  "Element_getById": Element_getById,
+  "Element_getChildCount": Element_getChildCount,
+  "Element_getClassNameLength": Element_getClassNameLength,
+  "Element_getDisabled": Element_getDisabled,
+  "Element_getInnerHTML": Element_getInnerHTML,
+  "Element_getInnerHTMLLen": Element_getInnerHTMLLen,
+  "Element_getStyle": Element_getStyle,
+  "Element_getStyleLen": Element_getStyleLen,
+  "Element_getVal": Element_getVal,
+  "Element_getValLen": Element_getValLen,
+  "Element_setDisabled": Element_setDisabled,
+  "Element_setInnerHTML": Element_setInnerHTML,
+  "Element_setOnclick": Element_setOnclick,
+  "Element_setStyle": Element_setStyle,
+  "Element_setVal": Element_setVal,
+  "JS_Man_allocateVar": JS_Man_allocateVar,
+  "JS_Man_construct": JS_Man_construct,
+  "JS_Man_evalJS": JS_Man_evalJS,
+  "JS_Man_freeVar": JS_Man_freeVar,
+  "Player_playNote": Player_playNote,
   "__cxa_allocate_exception": ___cxa_allocate_exception,
+  "__cxa_begin_catch": ___cxa_begin_catch,
+  "__cxa_end_catch": ___cxa_end_catch,
+  "__cxa_find_matching_catch_2": ___cxa_find_matching_catch_2,
+  "__cxa_find_matching_catch_3": ___cxa_find_matching_catch_3,
   "__cxa_throw": ___cxa_throw,
+  "__resumeException": ___resumeException,
   "abort": _abort,
   "emscripten_memcpy_big": _emscripten_memcpy_big,
   "emscripten_resize_heap": _emscripten_resize_heap,
@@ -4949,6 +5194,16 @@ var asmLibraryArg = {
   "fd_read": _fd_read,
   "fd_seek": _fd_seek,
   "fd_write": _fd_write,
+  "getTempRet0": _getTempRet0,
+  "invoke_ii": invoke_ii,
+  "invoke_iii": invoke_iii,
+  "invoke_iiii": invoke_iiii,
+  "invoke_v": invoke_v,
+  "invoke_vi": invoke_vi,
+  "invoke_vii": invoke_vii,
+  "invoke_viii": invoke_viii,
+  "invoke_viiii": invoke_viiii,
+  "invoke_viiiii": invoke_viiiii,
   "setTempRet0": _setTempRet0,
   "strftime_l": _strftime_l
 };
@@ -4957,43 +5212,52 @@ var asm = createWasm();
 var ___wasm_call_ctors = Module["___wasm_call_ctors"] = createExportWrapper("__wasm_call_ctors");
 
 /** @type {function(...*):?} */
-var _freeArr = Module["_freeArr"] = createExportWrapper("freeArr");
+var _optimizeChordButtonClick = Module["_optimizeChordButtonClick"] = createExportWrapper("optimizeChordButtonClick");
 
 /** @type {function(...*):?} */
-var _strlen_r = Module["_strlen_r"] = createExportWrapper("strlen_r");
+var _nextChordButtonClick = Module["_nextChordButtonClick"] = createExportWrapper("nextChordButtonClick");
 
 /** @type {function(...*):?} */
-var _getLetterFromNumber = Module["_getLetterFromNumber"] = createExportWrapper("getLetterFromNumber");
+var _playOptimizedChord = Module["_playOptimizedChord"] = createExportWrapper("playOptimizedChord");
 
 /** @type {function(...*):?} */
-var _getLetterFromNumber_Len = Module["_getLetterFromNumber_Len"] = createExportWrapper("getLetterFromNumber_Len");
+var _previousChordButtonClick = Module["_previousChordButtonClick"] = createExportWrapper("previousChordButtonClick");
 
 /** @type {function(...*):?} */
-var _getNumberFromLetter = Module["_getNumberFromLetter"] = createExportWrapper("getNumberFromLetter");
+var _onNoteChange = Module["_onNoteChange"] = createExportWrapper("onNoteChange");
 
 /** @type {function(...*):?} */
-var _noteFlat = Module["_noteFlat"] = createExportWrapper("noteFlat");
+var _setup = Module["_setup"] = createExportWrapper("setup");
 
 /** @type {function(...*):?} */
-var _getCListValue = Module["_getCListValue"] = createExportWrapper("getCListValue");
+var _sortChord1 = Module["_sortChord1"] = createExportWrapper("sortChord1");
 
 /** @type {function(...*):?} */
-var _optimizeChord = Module["_optimizeChord"] = createExportWrapper("optimizeChord");
+var _sortChord2 = Module["_sortChord2"] = createExportWrapper("sortChord2");
 
 /** @type {function(...*):?} */
-var _scoreChord = Module["_scoreChord"] = createExportWrapper("scoreChord");
+var _main = Module["_main"] = createExportWrapper("main");
 
 /** @type {function(...*):?} */
-var _getOptimizedChord = Module["_getOptimizedChord"] = createExportWrapper("getOptimizedChord");
+var _playChord1 = Module["_playChord1"] = createExportWrapper("playChord1");
 
 /** @type {function(...*):?} */
-var _getOptimizedChordLen = Module["_getOptimizedChordLen"] = createExportWrapper("getOptimizedChordLen");
+var _playChord2 = Module["_playChord2"] = createExportWrapper("playChord2");
+
+/** @type {function(...*):?} */
+var _buttonPlayNote = Module["_buttonPlayNote"] = createExportWrapper("buttonPlayNote");
+
+/** @type {function(...*):?} */
+var _callStdFunc = Module["_callStdFunc"] = createExportWrapper("callStdFunc");
 
 /** @type {function(...*):?} */
 var ___errno_location = Module["___errno_location"] = createExportWrapper("__errno_location");
 
 /** @type {function(...*):?} */
 var _fflush = Module["_fflush"] = createExportWrapper("fflush");
+
+/** @type {function(...*):?} */
+var _setThrew = Module["_setThrew"] = createExportWrapper("setThrew");
 
 /** @type {function(...*):?} */
 var _emscripten_stack_init = Module["_emscripten_stack_init"] = function() {
@@ -5023,6 +5287,15 @@ var stackAlloc = Module["stackAlloc"] = createExportWrapper("stackAlloc");
 var _malloc = Module["_malloc"] = createExportWrapper("malloc");
 
 /** @type {function(...*):?} */
+var _free = Module["_free"] = createExportWrapper("free");
+
+/** @type {function(...*):?} */
+var ___cxa_can_catch = Module["___cxa_can_catch"] = createExportWrapper("__cxa_can_catch");
+
+/** @type {function(...*):?} */
+var ___cxa_is_pointer_type = Module["___cxa_is_pointer_type"] = createExportWrapper("__cxa_is_pointer_type");
+
+/** @type {function(...*):?} */
 var dynCall_viijii = Module["dynCall_viijii"] = createExportWrapper("dynCall_viijii");
 
 /** @type {function(...*):?} */
@@ -5037,6 +5310,105 @@ var dynCall_iiiiijj = Module["dynCall_iiiiijj"] = createExportWrapper("dynCall_i
 /** @type {function(...*):?} */
 var dynCall_iiiiiijj = Module["dynCall_iiiiiijj"] = createExportWrapper("dynCall_iiiiiijj");
 
+
+function invoke_iii(index,a1,a2) {
+var sp = stackSave();
+try {
+  return getWasmTableEntry(index)(a1,a2);
+} catch(e) {
+  stackRestore(sp);
+  if (e !== e+0 && e !== 'longjmp') throw e;
+  _setThrew(1, 0);
+}
+}
+
+function invoke_iiii(index,a1,a2,a3) {
+var sp = stackSave();
+try {
+  return getWasmTableEntry(index)(a1,a2,a3);
+} catch(e) {
+  stackRestore(sp);
+  if (e !== e+0 && e !== 'longjmp') throw e;
+  _setThrew(1, 0);
+}
+}
+
+function invoke_ii(index,a1) {
+var sp = stackSave();
+try {
+  return getWasmTableEntry(index)(a1);
+} catch(e) {
+  stackRestore(sp);
+  if (e !== e+0 && e !== 'longjmp') throw e;
+  _setThrew(1, 0);
+}
+}
+
+function invoke_vii(index,a1,a2) {
+var sp = stackSave();
+try {
+  getWasmTableEntry(index)(a1,a2);
+} catch(e) {
+  stackRestore(sp);
+  if (e !== e+0 && e !== 'longjmp') throw e;
+  _setThrew(1, 0);
+}
+}
+
+function invoke_viii(index,a1,a2,a3) {
+var sp = stackSave();
+try {
+  getWasmTableEntry(index)(a1,a2,a3);
+} catch(e) {
+  stackRestore(sp);
+  if (e !== e+0 && e !== 'longjmp') throw e;
+  _setThrew(1, 0);
+}
+}
+
+function invoke_vi(index,a1) {
+var sp = stackSave();
+try {
+  getWasmTableEntry(index)(a1);
+} catch(e) {
+  stackRestore(sp);
+  if (e !== e+0 && e !== 'longjmp') throw e;
+  _setThrew(1, 0);
+}
+}
+
+function invoke_viiii(index,a1,a2,a3,a4) {
+var sp = stackSave();
+try {
+  getWasmTableEntry(index)(a1,a2,a3,a4);
+} catch(e) {
+  stackRestore(sp);
+  if (e !== e+0 && e !== 'longjmp') throw e;
+  _setThrew(1, 0);
+}
+}
+
+function invoke_viiiii(index,a1,a2,a3,a4,a5) {
+var sp = stackSave();
+try {
+  getWasmTableEntry(index)(a1,a2,a3,a4,a5);
+} catch(e) {
+  stackRestore(sp);
+  if (e !== e+0 && e !== 'longjmp') throw e;
+  _setThrew(1, 0);
+}
+}
+
+function invoke_v(index) {
+var sp = stackSave();
+try {
+  getWasmTableEntry(index)();
+} catch(e) {
+  stackRestore(sp);
+  if (e !== e+0 && e !== 'longjmp') throw e;
+  _setThrew(1, 0);
+}
+}
 
 
 
@@ -5300,6 +5672,40 @@ dependenciesFulfilled = function runCaller() {
   if (!calledRun) dependenciesFulfilled = runCaller; // try this again later, after new deps are fulfilled
 };
 
+function callMain(args) {
+  assert(runDependencies == 0, 'cannot call main when async dependencies remain! (listen on Module["onRuntimeInitialized"])');
+  assert(__ATPRERUN__.length == 0, 'cannot call main when preRun functions remain to be called');
+
+  var entryFunction = Module['_main'];
+
+  args = args || [];
+
+  var argc = args.length+1;
+  var argv = stackAlloc((argc + 1) * 4);
+  HEAP32[argv >> 2] = allocateUTF8OnStack(thisProgram);
+  for (var i = 1; i < argc; i++) {
+    HEAP32[(argv >> 2) + i] = allocateUTF8OnStack(args[i - 1]);
+  }
+  HEAP32[(argv >> 2) + argc] = 0;
+
+  try {
+
+    var ret = entryFunction(argc, argv);
+
+    // In PROXY_TO_PTHREAD builds, we should never exit the runtime below, as
+    // execution is asynchronously handed off to a pthread.
+    // if we're not running an evented main loop, it's time to exit
+    exit(ret, /* implicit = */ true);
+    return ret;
+  }
+  catch (e) {
+    return handleException(e);
+  } finally {
+    calledMain = true;
+
+  }
+}
+
 function stackCheckInit() {
   // This is normally called automatically during __wasm_call_ctors but need to
   // get these values before even running any of the ctors so we call it redundantly
@@ -5337,9 +5743,11 @@ function run(args) {
 
     initRuntime();
 
+    preMain();
+
     if (Module['onRuntimeInitialized']) Module['onRuntimeInitialized']();
 
-    assert(!Module['_main'], 'compiled without a main, but one is present. if you added it from JS, use Module["onRuntimeInitialized"]');
+    if (shouldRunNow) callMain(args);
 
     postRun();
   }
@@ -5433,6 +5841,11 @@ if (Module['preInit']) {
     Module['preInit'].pop()();
   }
 }
+
+// shouldRunNow refers to calling main(), not run().
+var shouldRunNow = true;
+
+if (Module['noInitialRun']) shouldRunNow = false;
 
 run();
 
