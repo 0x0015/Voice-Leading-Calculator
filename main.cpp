@@ -21,13 +21,13 @@ int main(int argc, char** argv){
 	if(args.hasArg("-c1")){
 		auto c1Arg = strSplit(args.findArgs("-c1")[0].value, ',');
 		for(int i=0;i<c1Arg.size();i++){
-			chord1.push_back(noteFromLetter(c1Arg[i]));
+			chord1.push_back(noteFromLetter(c1Arg[i]).value());
 		}
 	}
 	if(args.hasArg("-c2")){
 		auto c2Arg = strSplit(args.findArgs("-c2")[0].value, ',');
 		for(int i=0;i<c2Arg.size();i++){
-			chord2.push_back(noteFromLetter(c2Arg[i]));
+			chord2.push_back(noteFromLetter(c2Arg[i]).value());
 		}
 	}
 	std::cout<<"Range score: "<<Score::scoreRanges(chord1, chord2)<<std::endl;

@@ -47,6 +47,9 @@ unsigned int Score::scoreTwo(std::pair<uint8_t, uint8_t> pair1, std::pair<uint8_
 }
 
 unsigned int Score::scoreAll(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2){
+	if(chord1.size() == 0 || chord2.size() == 0){
+		return(std::numeric_limits<unsigned int>::max());
+	}
 	unsigned int output = scoreRanges(chord1, chord2);
 	return(output);
 }

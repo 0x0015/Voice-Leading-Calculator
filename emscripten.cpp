@@ -1,7 +1,7 @@
 #include "Score.hpp"
 #include "letterConvert.hpp"
 #include <cstring>
-#include <emscripten.h>
+#include "WebCpp-Interaction-Lib/DOM.hpp"
 
 extern "C" {
 	uint32_t EMSCRIPTEN_KEEPALIVE optimizeChord(const uint8_t* chord1, uint32_t chord1len, const uint8_t* chord2, uint32_t chord2len);

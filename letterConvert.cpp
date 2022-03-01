@@ -37,12 +37,14 @@ std::string sanatizeFirstNote(std::string letter){
 	return(letter);
 }
 
-uint8_t noteFromLetter(std::string letterUnsanitized){
+std::optional<uint8_t> noteFromLetter(std::string letterUnsanitized){
 	std::string letter = sanatizeFirstNote(letterUnsanitized);
 	int letterOnly;
 	int numberFrom = 1;
+	bool hasMinus = false;
 	if(letter.find("-") != std::string::npos){
 		numberFrom = 2;
+		hasMinus = true;
 	}
 	std::string letterOnlyNote = letter.substr(0, letter.length()-numberFrom);
 	switch(str2int(letterOnlyNote.c_str())){
@@ -98,17 +100,20 @@ uint8_t noteFromLetter(std::string letterUnsanitized){
 			letterOnly = 11;
 			break;
 		default:
-			return(0);
+			return(std::nullopt);
 	}
 	int octive;
 	try{
-		octive = std::stoi(letter.substr(letter.length()-1, 1));
+		if(hasMinus){
+			octive = std::stoi(letter.substr(letter.length()-2, 2));
+		}else{
+			octive = std::stoi(letter.substr(letter.length()-1, 1));
+		}
 	}catch(std::invalid_argument& e){
 		std::cout<<"Letterconvert found invalid arguement"<<std::endl;
-		return(-1);
+		return(std::nullopt);
 	}
 	int noteNum = letterOnly + (12 * (octive + 1));
-	//std::cout<<"letterconvert note num "<<noteNum<<std::endl;
 	return((uint8_t)noteNum);
 }
 

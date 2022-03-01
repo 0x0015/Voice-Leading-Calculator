@@ -20,9 +20,3 @@ function playNote(note, velocity, length){
 		MIDI.noteOff(0, note, length);
 	}
 }
-
-function playNotes(notes, velocity, length){
-	for(var i=0;i<notes.length;i++){
-		playNote(notes[i], velocity, length);
-	}
-}
