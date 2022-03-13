@@ -221,6 +221,7 @@ void setup(){
 }
 
 int main(){
+	std::cout<<"Voice Leading Calculator:  v0x01"<<std::endl;
 	setup();
 	onNoteChange();
 	std::string initPlayer = "PlayerInit();";
