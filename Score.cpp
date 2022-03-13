@@ -93,7 +93,7 @@ unsigned int Score::scoreAll(std::vector<uint8_t>& chord1, std::vector<uint8_t>&
 	unsigned int output = 0;
 	noteDifferenceScore = scoreRanges(chord1, chord2);
 	output += noteDifferenceScore;
-	parallelOctivesScore = scoreParallelFiths(chord1, chord2) * parallelFithsWeight * numNotes;
+	parallelFithsScore = scoreParallelFiths(chord1, chord2) * parallelFithsWeight * numNotes;
 	output += parallelFithsScore;
 	parallelOctivesScore = scoreParallelOctives(chord1, chord2) * parallelOctivesWeight * numNotes;
 	output += parallelOctivesScore;
