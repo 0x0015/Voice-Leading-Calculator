@@ -321,7 +321,6 @@ void playOptimizedChord(){
 
 void arpegiateChordChange(){
 	arpegiate = Element::getByClassName("arpegiateChord")[0]->dom_checked;
-	std::cout<<"Checked: "<<arpegiate<<std::endl;
 
 }
 
