@@ -1727,6 +1727,7 @@ function Element_AssignChildElement(hash,newHash,index){ JS_Man["A" + newHash] =
 function Element_AssignListElement(hash,newHash,index){ JS_Man["A" + newHash] = JS_Man["A" + hash][index]; }
 function Element_callOnclick(hash){ JS_Man["A" + hash].onclick(); }
 function Element_getById(hash,id){ JS_Man["A" + hash] = document.getElementById(UTF8ToString(id)); }
+function Element_getChecked(hash){ return(JS_Man["A" + hash].checked); }
 function Element_getChildCount(hash){ return(JS_Man["A" + hash].childElementCount); }
 function Element_getClassNameLength(hash,classname){ JS_Man["A" + hash] = document.getElementsByClassName(UTF8ToString(classname)); return(JS_Man["A" + hash].length); }
 function Element_getDisabled(hash){ return(JS_Man["A" + hash].disabled); }
@@ -1736,6 +1737,7 @@ function Element_getStyle(hash,whatStyle,str,len){ stringToUTF8(JS_Man["A" + has
 function Element_getStyleLen(hash,whatStyle){ return(lengthBytesUTF8(JS_Man["A" + hash].style[UTF8ToString(whatStyle)])); }
 function Element_getVal(hash,id,length){ stringToUTF8(JS_Man["A" + hash].value, id, length+1); }
 function Element_getValLen(hash){ return(lengthBytesUTF8(JS_Man["A" + hash].value)); }
+function Element_setChecked(hash,value){ JS_Man["A" + hash].checked = value; }
 function Element_setDisabled(hash,value){ JS_Man["A" + hash].disabled = value; }
 function Element_setInnerHTML(hash,id){ JS_Man["A" + hash].innerHTML = UTF8ToString(id); }
 function Element_setOnclick(hash,funcHash){ JS_Man["A" + hash].onclick = function(){ var callStdFuncWrap = Module.cwrap('callStdFunc', '', 'number'); callStdFuncWrap(funcHash); } }
@@ -5159,6 +5161,7 @@ var asmLibraryArg = {
   "Element_AssignListElement": Element_AssignListElement,
   "Element_callOnclick": Element_callOnclick,
   "Element_getById": Element_getById,
+  "Element_getChecked": Element_getChecked,
   "Element_getChildCount": Element_getChildCount,
   "Element_getClassNameLength": Element_getClassNameLength,
   "Element_getDisabled": Element_getDisabled,
@@ -5168,6 +5171,7 @@ var asmLibraryArg = {
   "Element_getStyleLen": Element_getStyleLen,
   "Element_getVal": Element_getVal,
   "Element_getValLen": Element_getValLen,
+  "Element_setChecked": Element_setChecked,
   "Element_setDisabled": Element_setDisabled,
   "Element_setInnerHTML": Element_setInnerHTML,
   "Element_setOnclick": Element_setOnclick,
@@ -5233,10 +5237,22 @@ var _parallelOctiveWeightChange = Module["_parallelOctiveWeightChange"] = create
 var _parallelFithWeightChange = Module["_parallelFithWeightChange"] = createExportWrapper("parallelFithWeightChange");
 
 /** @type {function(...*):?} */
+var _memorizeOptimizedChord = Module["_memorizeOptimizedChord"] = createExportWrapper("memorizeOptimizedChord");
+
+/** @type {function(...*):?} */
+var _memorizeChord1 = Module["_memorizeChord1"] = createExportWrapper("memorizeChord1");
+
+/** @type {function(...*):?} */
+var _memorizeChord2 = Module["_memorizeChord2"] = createExportWrapper("memorizeChord2");
+
+/** @type {function(...*):?} */
+var _clearMemory = Module["_clearMemory"] = createExportWrapper("clearMemory");
+
+/** @type {function(...*):?} */
 var _setup = Module["_setup"] = createExportWrapper("setup");
 
 /** @type {function(...*):?} */
-var _arpegOptimizedChord = Module["_arpegOptimizedChord"] = createExportWrapper("arpegOptimizedChord");
+var _arpegiateChordChange = Module["_arpegiateChordChange"] = createExportWrapper("arpegiateChordChange");
 
 /** @type {function(...*):?} */
 var _sortChord1 = Module["_sortChord1"] = createExportWrapper("sortChord1");
@@ -5254,13 +5270,13 @@ var _playChord1 = Module["_playChord1"] = createExportWrapper("playChord1");
 var _playChord2 = Module["_playChord2"] = createExportWrapper("playChord2");
 
 /** @type {function(...*):?} */
-var _arpegChord1 = Module["_arpegChord1"] = createExportWrapper("arpegChord1");
-
-/** @type {function(...*):?} */
-var _arpegChord2 = Module["_arpegChord2"] = createExportWrapper("arpegChord2");
-
-/** @type {function(...*):?} */
 var _buttonPlayNote = Module["_buttonPlayNote"] = createExportWrapper("buttonPlayNote");
+
+/** @type {function(...*):?} */
+var _playMemoryn = Module["_playMemoryn"] = createExportWrapper("playMemoryn");
+
+/** @type {function(...*):?} */
+var _playMemory = Module["_playMemory"] = createExportWrapper("playMemory");
 
 /** @type {function(...*):?} */
 var _callStdFunc = Module["_callStdFunc"] = createExportWrapper("callStdFunc");
