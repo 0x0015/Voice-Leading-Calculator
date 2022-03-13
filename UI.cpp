@@ -12,8 +12,11 @@ extern "C" {
 	void EMSCRIPTEN_KEEPALIVE previousChordButtonClick();
 	void EMSCRIPTEN_KEEPALIVE onNoteChange();
 	void EMSCRIPTEN_KEEPALIVE playOptimizedChord();
+	void EMSCRIPTEN_KEEPALIVE arpegOptimizedChord();
 	void EMSCRIPTEN_KEEPALIVE sortChord1();
 	void EMSCRIPTEN_KEEPALIVE sortChord2();
+	void EMSCRIPTEN_KEEPALIVE parallelFithWeightChange();
+	void EMSCRIPTEN_KEEPALIVE parallelOctiveWeightChange();
 }
 
 int notesPerChord = 6;
@@ -104,6 +107,15 @@ void setChordnL(unsigned int chordNumber, std::vector<std::string>& notes){
 
 std::vector<std::vector<uint8_t>> lastOptimizedChord;
 
+std::string getAnalysisText(unsigned int scoreVal){
+	std::string scoreAnalysis = "Overall Score: ";
+	scoreAnalysis += std::to_string(scoreVal) + "<br><br>";
+	scoreAnalysis += "Note Difference Score: " + std::to_string(Score::noteDifferenceScore) + "<br>";
+	scoreAnalysis += "Parallel Fifths Score: " + std::to_string(Score::parallelFithsScore) + "<br>";
+	scoreAnalysis += "Parallel Octives Score: " + std::to_string(Score::parallelOctivesScore);
+	return(scoreAnalysis);
+}
+
 void showOptimizedChord(unsigned int index){
 	if(lastOptimizedChord.size() <= index){
 		return;
@@ -115,19 +127,25 @@ void showOptimizedChord(unsigned int index){
 		return;
 	}
 	std::string resultText = "Result: ";
-	for(unsigned int i=0;i<score.size();i++){
-		std::string note = letterFromNote(score[i]);
-		resultText += note;
-		if(i+1<score.size()){
-			resultText += " ";
-		}
+	for(unsigned int i=1;i<=6;i++){
+		auto noteScoreText = Element::getByClassName("optimizeButtonResult" + std::to_string(i))[0];
+		noteScoreText->dom_style["display"] = "none";
 	}
-	resultText += ", Score: " + std::to_string(scoreVal);
+	for(unsigned int i=0;i<score.size();i++){
+		auto noteScoreText = Element::getByClassName("optimizeButtonResult" + std::to_string(6-i))[0];
+		noteScoreText->dom_innerHTML = letterFromNote(score[i]);
+		noteScoreText->dom_style["display"] = "";
+	}
 	auto scoreText = Element::getByClassName("optimizeButtonResult")[0];
 	scoreText->dom_innerHTML = (std::string)resultText;
+	auto analysisText = Element::getByClassName("optimizeButtonResultAnalysis")[0];
+	analysisText->dom_innerHTML = getAnalysisText(scoreVal);
 	Element::getByClassName("playOptimizedChord")[0]->dom_style["display"] = "";
+	Element::getByClassName("arpegOptimizedChord")[0]->dom_style["display"] = "";
 	Element::getByClassName("nextChordButton")[0]->dom_style["display"] = "";
 	Element::getByClassName("previousChordButton")[0]->dom_style["display"] = "";
+	Element::getByClassName("optimizeButtonResultDisplay")[0]->dom_style["display"] = "";
+	Element::getByClassName("optimizeButtonResultAnalysis")[0]->dom_style["display"] = "";
 	Element::getByClassName("previousChordButton")[0]->dom_disabled = true;
 }
 
@@ -159,7 +177,8 @@ void previousChordButtonClick(){
 	if(currentChordIndex > 0){
 		currentChordIndex--;
 		showOptimizedChord(currentChordIndex);
-		if(currentChordIndex-1<0){
+		std::cout<<currentChordIndex<<std::endl;
+		if(currentChordIndex < 1){
 			Element::getByClassName("previousChordButton")[0]->dom_disabled = true;
 		}else{
 			Element::getByClassName("previousChordButton")[0]->dom_disabled = false;
@@ -177,14 +196,28 @@ void onNoteChange(){
 	if(score == std::numeric_limits<unsigned int>::max()){
 		scoreText->dom_innerHTML = (std::string)"Score: N/A";
 	}else{
-		scoreText->dom_innerHTML = "Score: " + std::to_string(score);
+		//scoreText->dom_innerHTML = "Score: " + std::to_string(score);
+		scoreText->dom_innerHTML = getAnalysisText(score);
 	}
+}
+
+void parallelOctiveWeightChange(){
+	Score::parallelOctivesWeight = std::stoi(Element::getByClassName("parallelOctiveWeightInput")[0]->dom_value);
+	onNoteChange();
+}
+
+void parallelFithWeightChange(){
+	Score::parallelFithsWeight = std::stoi(Element::getByClassName("parallelFithWeightInput")[0]->dom_value);
+	onNoteChange();
 }
 
 void setup(){
 	Element::getByClassName("playOptimizedChord")[0]->dom_style["display"] = "none";
+	Element::getByClassName("arpegOptimizedChord")[0]->dom_style["display"] = "none";
 	Element::getByClassName("previousChordButton")[0]->dom_style["display"] = "none";
 	Element::getByClassName("nextChordButton")[0]->dom_style["display"] = "none";
+	Element::getByClassName("optimizeButtonResultDisplay")[0]->dom_style["display"] = "none";
+	Element::getByClassName("optimizeButtonResultAnalysis")[0]->dom_style["display"] = "none";
 }
 
 int main(){
@@ -197,6 +230,10 @@ int main(){
 
 void playOptimizedChord(){
 	playNotes(lastOptimizedChord[currentChordIndex], 127, 1);
+}
+
+void arpegOptimizedChord(){
+	playNotes(lastOptimizedChord[currentChordIndex], 127, 0.25, 0.25);
 }
 
 std::vector<std::string> sortChord(std::vector<std::string>& chord){

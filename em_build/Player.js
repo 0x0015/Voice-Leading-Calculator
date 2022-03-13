@@ -14,9 +14,9 @@ function PlayerInit(){
 	});
 }
 
-function playNote(note, velocity, length){
+function playNote(note, velocity, length, time){
 	if(loadedMidi){
-		MIDI.noteOn(0, note, velocity, 0);
-		MIDI.noteOff(0, note, length);
+		MIDI.noteOn(0, note, velocity, time);
+		MIDI.noteOff(0, note, length + time);
 	}
 }

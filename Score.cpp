@@ -30,7 +30,8 @@ unsigned int Score::scoreRanges(std::vector<uint8_t>& chord1, std::vector<uint8_
 	std::vector<uint8_t> chord1S = sortChord(chord1);
 	std::vector<uint8_t> chord2S = sortChord(chord2);
 	if(chord1S.size() != chord2S.size()){
-		return(scoreRanges(chord1S, chord2S));
+		unsigned int output = scoreRanges(chord1S, chord2S);
+		return(output);
 	}
 	unsigned int output = 0;
 	for(int i=0;i<chord1S.size();i++){
@@ -40,17 +41,62 @@ unsigned int Score::scoreRanges(std::vector<uint8_t>& chord1, std::vector<uint8_
 	return(output);
 }
 
+template<uint8_t dif> unsigned int findNumSteps(std::vector<uint8_t>& chord){//O(n)
+	if(chord.size() == 0){
+		return(0);
+	}
+	unsigned int found = 0;
+	uint8_t lastNote = chord[0];
+	for(int i=1;i<chord.size();i++){
+		unsigned int noteDiference = (unsigned int)(std::abs((int)chord[i]-(int)lastNote));
+		if(noteDiference == dif){
+			found++;
+		}
+		lastNote = chord[i];
+	}
+	return(found);
+}
+
+unsigned int Score::scoreParallelFiths(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2){
+	unsigned int chord1F = findNumSteps<7>(chord1);
+	if(chord1F > 0){
+		unsigned int chord2F = findNumSteps<7>(chord2);
+		return(std::min(chord1F, chord2F));
+	}
+	return(0);
+}
+
+unsigned int Score::scoreParallelOctives(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2){
+	unsigned int chord1F = findNumSteps<12>(chord1);
+	if(chord1F > 0){
+		unsigned int chord2F = findNumSteps<12>(chord2);
+		return(std::min(chord1F, chord2F));
+	}
+	return(0);
+}
+
 unsigned int Score::scoreTwo(std::pair<uint8_t, uint8_t> pair1, std::pair<uint8_t, uint8_t> pair2){
 	unsigned int output = 0;
 	
 	return(output);
 }
 
+
 unsigned int Score::scoreAll(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2){
 	if(chord1.size() == 0 || chord2.size() == 0){
 		return(std::numeric_limits<unsigned int>::max());
 	}
-	unsigned int output = scoreRanges(chord1, chord2);
+	if(findNumSteps<0>(chord1) > 0 || findNumSteps<0>(chord2) > 0){
+		return(std::numeric_limits<unsigned int>::max());
+	}
+	unsigned int numNotes = std::min(chord1.size(), chord2.size());
+	unsigned int output = 0;
+	noteDifferenceScore = scoreRanges(chord1, chord2);
+	output += noteDifferenceScore;
+	parallelOctivesScore = scoreParallelFiths(chord1, chord2) * parallelFithsWeight * numNotes;
+	output += parallelFithsScore;
+	parallelOctivesScore = scoreParallelOctives(chord1, chord2) * parallelOctivesWeight * numNotes;
+	output += parallelOctivesScore;
 	return(output);
 }
 

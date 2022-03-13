@@ -24,9 +24,14 @@ public:
 	static inline bool fewerThan4Voices = true;
 	static inline bool incorrectPreperationOrResolutionOfSuspension = true;
 	static inline bool multipleSectionCErrors = true;
+	static inline unsigned int noteDifferenceScore = 0;
+	static inline unsigned int parallelFithsScore = 0;
+	static inline unsigned int parallelOctivesScore = 0;
 	static unsigned int scoreTwo(std::pair<uint8_t, uint8_t> pair1, std::pair<uint8_t, uint8_t> pair2);
 	static unsigned int scoreAll(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2);
 	static unsigned int scoreRanges(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2);
+	static unsigned int scoreParallelFiths(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2);
+	static unsigned int scoreParallelOctives(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2);
 	static inline unsigned int keepScores = 128;
 	static std::vector<std::vector<uint8_t>> optimizeScore(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2);
 	static void printChord(std::vector<uint8_t>& chord);
