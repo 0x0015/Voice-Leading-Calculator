@@ -4,6 +4,8 @@
 #include "WebCpp-Interaction-Lib/DOM.hpp"
 #include <emscripten.h>
 #include "Player.hpp"
+#include "UI.hpp"
+#include <thread>
 
 extern "C" {
 	void EMSCRIPTEN_KEEPALIVE setup();
@@ -12,14 +14,16 @@ extern "C" {
 	void EMSCRIPTEN_KEEPALIVE previousChordButtonClick();
 	void EMSCRIPTEN_KEEPALIVE onNoteChange();
 	void EMSCRIPTEN_KEEPALIVE playOptimizedChord();
-	void EMSCRIPTEN_KEEPALIVE arpegOptimizedChord();
 	void EMSCRIPTEN_KEEPALIVE sortChord1();
 	void EMSCRIPTEN_KEEPALIVE sortChord2();
 	void EMSCRIPTEN_KEEPALIVE parallelFithWeightChange();
 	void EMSCRIPTEN_KEEPALIVE parallelOctiveWeightChange();
+	void EMSCRIPTEN_KEEPALIVE arpegiateChordChange();
+	void EMSCRIPTEN_KEEPALIVE memorizeOptimizedChord();
+	void EMSCRIPTEN_KEEPALIVE memorizeChord1();
+	void EMSCRIPTEN_KEEPALIVE memorizeChord2();
+	void EMSCRIPTEN_KEEPALIVE clearMemory();
 }
-
-int notesPerChord = 6;
 
 std::string strip(std::string in){
 	std::string output;
@@ -37,12 +41,29 @@ std::vector<uint8_t> getChordn(unsigned int chordNumber){
 		auto cnl = Element::getByClassName("c" + std::to_string(chordNumber) + "n" + std::to_string(i) + "l");
 		auto cnn = Element::getByClassName("c" + std::to_string(chordNumber) + "n" + std::to_string(i) + "n");
 		std::string letterActually = (std::string)cnl[0]->dom_value + (std::string)cnn[0]->dom_value;
-		std::cout<<"Letteractually: "<<letterActually<<std::endl;
+		//std::cout<<"Letteractually: "<<letterActually<<std::endl;
 		if(!(strip(cnl[0]->dom_value) == "" || strip(cnn[0]->dom_value) == "")){
 			auto cnNote = noteFromLetter(letterActually);
 			if(!(!cnNote || strip(letterActually) == "")){
 				output.push_back(cnNote.value());
-				std::cout<<" cnNote: "<<(unsigned int)cnNote.value()<<std::endl;
+				//std::cout<<" cnNote: "<<(unsigned int)cnNote.value()<<std::endl;
+			}
+		}
+	}
+	return(output);
+}
+
+std::vector<uint8_t> getMemoryn(unsigned int chordNumber){
+	std::vector<uint8_t> output;
+	for(unsigned int i=0;i<chordMemories;i++){
+		auto cn = Element::getByClassName("ChordMemory" + std::to_string(chordNumber) + "c" + std::to_string(6-i));
+		std::string letterActually = (std::string)cn[0]->dom_innerHTML;
+		//std::cout<<"Letteractually: "<<letterActually<<std::endl;
+		if(!(strip(letterActually) == "")){
+			auto cnNote = noteFromLetter(letterActually);
+			if(!(!cnNote || strip(letterActually) == "")){
+				output.push_back(cnNote.value());
+				//std::cout<<" cnNote: "<<(unsigned int)cnNote.value()<<std::endl;
 			}
 		}
 	}
@@ -94,7 +115,7 @@ void setChordnL(unsigned int chordNumber, std::vector<std::string>& notes){
 		cnn[0]->dom_value = (std::string)" ";
 		cnl[0]->dom_value = (std::string)" ";
 	}
-	std::cout<<"Cleared notes"<<std::endl;
+	//std::cout<<"Cleared notes"<<std::endl;
 	for(unsigned int i=1;i<=notesPerChord;i++){	
 		auto cnl = Element::getByClassName("c" + std::to_string(chordNumber) + "n" + std::to_string(i) + "l");
 		auto cnn = Element::getByClassName("c" + std::to_string(chordNumber) + "n" + std::to_string(i) + "n");
@@ -102,6 +123,18 @@ void setChordnL(unsigned int chordNumber, std::vector<std::string>& notes){
 		std::string cnlVal = removeDigOrMinus(notes[i-1], true);
 		cnn[0]->dom_value = (std::string)cnnVal;
 		cnl[0]->dom_value = (std::string)cnlVal;
+	}
+}
+
+void setChordMemory(unsigned int chordNumber, std::vector<std::string>& notes){
+	for(unsigned int i=0;i<notesPerChord;i++){
+		auto cn = Element::getByClassName("ChordMemory" + std::to_string(chordNumber) + "c" + std::to_string(notesPerChord-i));
+		cn[0]->dom_innerHTML = std::string("");
+	}
+	//std::cout<<"Cleared notes"<<std::endl;
+	for(unsigned int i=0;i<notesPerChord&&i<notes.size();i++){
+		auto cn = Element::getByClassName("ChordMemory" + std::to_string(chordNumber) + "c" + std::to_string(notesPerChord-i));
+		cn[0]->dom_innerHTML = (std::string)notes[i];
 	}
 }
 
@@ -141,7 +174,7 @@ void showOptimizedChord(unsigned int index){
 	auto analysisText = Element::getByClassName("optimizeButtonResultAnalysis")[0];
 	analysisText->dom_innerHTML = getAnalysisText(scoreVal);
 	Element::getByClassName("playOptimizedChord")[0]->dom_style["display"] = "";
-	Element::getByClassName("arpegOptimizedChord")[0]->dom_style["display"] = "";
+	Element::getByClassName("memorizeOptimizedChord")[0]->dom_style["display"] = "";
 	Element::getByClassName("nextChordButton")[0]->dom_style["display"] = "";
 	Element::getByClassName("previousChordButton")[0]->dom_style["display"] = "";
 	Element::getByClassName("optimizeButtonResultDisplay")[0]->dom_style["display"] = "";
@@ -177,7 +210,7 @@ void previousChordButtonClick(){
 	if(currentChordIndex > 0){
 		currentChordIndex--;
 		showOptimizedChord(currentChordIndex);
-		std::cout<<currentChordIndex<<std::endl;
+		//std::cout<<currentChordIndex<<std::endl;
 		if(currentChordIndex < 1){
 			Element::getByClassName("previousChordButton")[0]->dom_disabled = true;
 		}else{
@@ -211,9 +244,58 @@ void parallelFithWeightChange(){
 	onNoteChange();
 }
 
+void memorizeOptimizedChord(){
+	auto chordi = lastOptimizedChord[currentChordIndex];
+	std::vector<std::string> chord;
+	for(int i=0;i<chordi.size();i++){
+		std::string note = letterFromNote(chordi[i]);
+		chord.push_back(note);
+	}
+	setChordMemory(memorizedChords+1, chord);
+	memorizedChords++;
+	if(memorizedChords+1>chordMemories){	
+		Element::getByClassName("memorizeOptimizedChord")[0]->dom_disabled = true;
+		Element::getByClassName("memorizeChord1")[0]->dom_disabled = true;
+		Element::getByClassName("memorizeChord2")[0]->dom_disabled = true;
+	}
+}
+
+void memorizeChord1(){
+	auto chord = getChordnL(1);
+	setChordMemory(memorizedChords+1, chord);
+	memorizedChords++;
+	if(memorizedChords+1>chordMemories){	
+		Element::getByClassName("memorizeOptimizedChord")[0]->dom_disabled = true;
+		Element::getByClassName("memorizeChord1")[0]->dom_disabled = true;
+		Element::getByClassName("memorizeChord2")[0]->dom_disabled = true;
+	}
+}
+
+void memorizeChord2(){
+	auto chord = getChordnL(2);
+	setChordMemory(memorizedChords+1, chord);
+	memorizedChords++;
+	if(memorizedChords+1>chordMemories){	
+		Element::getByClassName("memorizeOptimizedChord")[0]->dom_disabled = true;
+		Element::getByClassName("memorizeChord1")[0]->dom_disabled = true;
+		Element::getByClassName("memorizeChord2")[0]->dom_disabled = true;
+	}
+}
+
+void clearMemory(){
+	std::vector<std::string> chord = {};
+	for(int i=1;i<=chordMemories;i++){
+		setChordMemory(i, chord);
+	}
+	memorizedChords = 0;
+	Element::getByClassName("memorizeOptimizedChord")[0]->dom_disabled = false;
+	Element::getByClassName("memorizeChord1")[0]->dom_disabled = false;
+	Element::getByClassName("memorizeChord2")[0]->dom_disabled = false;
+}
+
 void setup(){
 	Element::getByClassName("playOptimizedChord")[0]->dom_style["display"] = "none";
-	Element::getByClassName("arpegOptimizedChord")[0]->dom_style["display"] = "none";
+	Element::getByClassName("memorizeOptimizedChord")[0]->dom_style["display"] = "none";
 	Element::getByClassName("previousChordButton")[0]->dom_style["display"] = "none";
 	Element::getByClassName("nextChordButton")[0]->dom_style["display"] = "none";
 	Element::getByClassName("optimizeButtonResultDisplay")[0]->dom_style["display"] = "none";
@@ -221,7 +303,7 @@ void setup(){
 }
 
 int main(){
-	std::cout<<"Voice Leading Calculator:  v0x01"<<std::endl;
+	std::cout<<"Voice Leading Calculator:  v0x02"<<std::endl;
 	setup();
 	onNoteChange();
 	std::string initPlayer = "PlayerInit();";
@@ -230,11 +312,17 @@ int main(){
 }
 
 void playOptimizedChord(){
-	playNotes(lastOptimizedChord[currentChordIndex], 127, 1);
+	if(!arpegiate){
+		playNotes(lastOptimizedChord[currentChordIndex], 127, 1);
+	}else{
+		playNotes(lastOptimizedChord[currentChordIndex], 127, 0.25, 0.25);
+	}
 }
 
-void arpegOptimizedChord(){
-	playNotes(lastOptimizedChord[currentChordIndex], 127, 0.25, 0.25);
+void arpegiateChordChange(){
+	arpegiate = Element::getByClassName("arpegiateChord")[0]->dom_checked;
+	std::cout<<"Checked: "<<arpegiate<<std::endl;
+
 }
 
 std::vector<std::string> sortChord(std::vector<std::string>& chord){

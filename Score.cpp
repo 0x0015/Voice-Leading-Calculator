@@ -57,19 +57,36 @@ template<uint8_t dif> unsigned int findNumSteps(std::vector<uint8_t>& chord){//O
 	return(found);
 }
 
+template<uint8_t dif> unsigned int findNumStepsRecur(std::vector<uint8_t>& chord){//O(n!)
+	if(chord.size() == 0){
+		return(0);
+	}
+	unsigned int found = 0;
+	for(int ln = 0;ln<chord.size();ln++){
+		uint8_t lastNote = chord[ln];
+		for(int i=ln;i<chord.size();i++){
+			unsigned int noteDiference = (unsigned int)(std::abs((int)chord[i]-(int)lastNote));
+			if(noteDiference == dif){
+				found++;
+			}
+		}
+	}
+	return(found);
+}
+
 unsigned int Score::scoreParallelFiths(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2){
-	unsigned int chord1F = findNumSteps<7>(chord1);
+	unsigned int chord1F = findNumStepsRecur<7>(chord1);
 	if(chord1F > 0){
-		unsigned int chord2F = findNumSteps<7>(chord2);
+		unsigned int chord2F = findNumStepsRecur<7>(chord2);
 		return(std::min(chord1F, chord2F));
 	}
 	return(0);
 }
 
 unsigned int Score::scoreParallelOctives(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2){
-	unsigned int chord1F = findNumSteps<12>(chord1);
+	unsigned int chord1F = findNumStepsRecur<12>(chord1);
 	if(chord1F > 0){
-		unsigned int chord2F = findNumSteps<12>(chord2);
+		unsigned int chord2F = findNumStepsRecur<12>(chord2);
 		return(std::min(chord1F, chord2F));
 	}
 	return(0);

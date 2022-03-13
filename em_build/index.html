@@ -584,11 +584,11 @@
 						<tr>	
 						<td>
 							<button class="playChord1 w3-button w3-light-grey" onclick="playChord1()">Play</button>
-							<button class="arpegChord1 w3-button w3-light-grey" onclick="arpegChord1()">Arpegiate</button>
+							<button class="memorizeChord1 w3-button w3-light-grey" onclick="memorizeChord1()">+Bank</button>
 						</td>
 						<td>
-							<button class="playChord2 w3-button w3-light-grey" onclick="playChord2()">Play</button>	
-							<button class="arpegChord2 w3-button w3-light-grey" onclick="arpegChord2()">Arpegiate</button>
+							<button class="playChord2 w3-button w3-light-grey" onclick="playChord2()">Play</button>
+							<button class="memorizeChord2 w3-button w3-light-grey" onclick="memorizeChord2()">+Bank</button>
 						</td>
 						</tr>
 					</table>
@@ -598,6 +598,8 @@
 							<th><H4 class="scoreButtonResult"></H4></th>
 							<th>
 								<H4>Options:</H4><br>
+								<input type="checkbox" class="arpegiateChord" id="arpegiateChord" onchange="arpegiateChordChange()">
+								<label for="arpegiateChord">Arpegiate Chords</label><br><br>
 								<label>Parallel Fifth Weight: </label>
 								<input class="parallelFithWeightInput" onchange="parallelFithWeightChange()" type="number" value="1"><br>
 								<label>Parallel Octive Weight: </label>
@@ -622,7 +624,7 @@
 								</table>
 							</div>
 							<button class="playOptimizedChord w3-button w3-light-grey" onclick="playOptimizedChord()">Play</button>
-							<button class="arpegOptimizedChord w3-button w3-light-grey" onclick="arpegOptimizedChord()">Arpegiate</button>
+							<button class="memorizeOptimizedChord w3-button w3-light-grey" onclick="memorizeOptimizedChord()">+Bank</button>
 							<button class="nextChordButton w3-button w3-light-grey" onclick="nextChordButtonClick()">→</button>
 							</th>
 							<th>
@@ -630,6 +632,92 @@
 							</th>
 						</tr>
 					</table>
+					<br>
+					<H3>Chord Bank:</H3>
+					<table class="w3-table">
+						<tr>
+						<th>
+							<div class="chordMemory1 w3-bar">
+								<table class="w3-table">
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory1c1"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory1c2"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory1c3"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory1c4"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory1c5"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory1c6"></H4></th></tr>
+									<tr><th><button class="playChordMemory1 w3-button w3-light-grey" onclick="playMemoryn(1)">Play</button></th></tr>
+								</table>
+							</div>
+						</th>
+						<th>
+							<div class="chordMemory2 w3-bar">
+								<table class="w3-table">
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory2c1"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory2c2"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory2c3"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory2c4"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory2c5"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory2c6"></H4></th></tr>
+									<tr><th><button class="playChordMemory2 w3-button w3-light-grey" onclick="playMemoryn(2)">Play</button></th></tr>
+								</table>
+							</div>
+						</th>
+						<th>
+							<div class="chordMemory3 w3-bar">
+								<table class="w3-table">
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory3c1"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory3c2"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory3c3"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory3c4"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory3c5"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory3c6"></H4></th></tr>
+									<tr><th><button class="playChordMemory3 w3-button w3-light-grey" onclick="playMemoryn(3)">Play</button></th></tr>
+								</table>
+							</div>
+						</th>
+						<th>
+							<div class="chordMemory4 w3-bar">
+								<table class="w3-table">
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory4c1"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory4c2"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory4c3"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory4c4"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory4c5"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory4c6"></H4></th></tr>
+									<tr><th><button class="playChordMemory4 w3-button w3-light-grey" onclick="playMemoryn(4)">Play</button></th></tr>
+								</table>
+							</div>
+						</th>
+						<th>
+							<div class="chordMemory5 w3-bar">
+								<table class="w3-table">
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory5c1"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory5c2"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory5c3"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory5c4"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory5c5"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory5c6"></H4></th></tr>
+									<tr><th><button class="playChordMemory5 w3-button w3-light-grey" onclick="playMemoryn(5)">Play</button></th></tr>
+								</table>
+							</div>
+						</th>
+						<th>
+							<div class="chordMemory6 w3-bar">
+								<table class="w3-table">
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory6c1"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory6c2"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory6c3"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory6c4"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory6c5"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory6c6"></H4></th></tr>
+									<tr><th><button class="playChordMemory6 w3-button w3-light-grey" onclick="playMemoryn(6)">Play</button></th></tr>
+								</table>
+							</div>
+						</th>
+						</tr>
+					</table>
+					<button class="playChordMemory w3-button w3-light-grey" onclick="playMemory()">Play</button>
+					<button class="clearChordMemory w3-button w3-light-grey" onclick="clearMemory()">Clear</button>
 			</div>
 		</div>
 	</body>
