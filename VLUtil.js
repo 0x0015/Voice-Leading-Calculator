@@ -1745,7 +1745,7 @@ function JS_Man_allocateVar(hash){ JS_Man["A" + hash] = undefined; }
 function JS_Man_construct(){ window.JS_Man = {}; }
 function JS_Man_evalJS(code){ let func = new Function(UTF8ToString(code)); func(); }
 function JS_Man_freeVar(hash){ return(delete JS_Man["A" + hash]); }
-function Player_playNote(note,velocity,length){ playNote(note, velocity, length); }
+function Player_playNote(note,velocity,length,time){ playNote(note, velocity, length, time); }
 
 
 
@@ -5227,7 +5227,16 @@ var _previousChordButtonClick = Module["_previousChordButtonClick"] = createExpo
 var _onNoteChange = Module["_onNoteChange"] = createExportWrapper("onNoteChange");
 
 /** @type {function(...*):?} */
+var _parallelOctiveWeightChange = Module["_parallelOctiveWeightChange"] = createExportWrapper("parallelOctiveWeightChange");
+
+/** @type {function(...*):?} */
+var _parallelFithWeightChange = Module["_parallelFithWeightChange"] = createExportWrapper("parallelFithWeightChange");
+
+/** @type {function(...*):?} */
 var _setup = Module["_setup"] = createExportWrapper("setup");
+
+/** @type {function(...*):?} */
+var _arpegOptimizedChord = Module["_arpegOptimizedChord"] = createExportWrapper("arpegOptimizedChord");
 
 /** @type {function(...*):?} */
 var _sortChord1 = Module["_sortChord1"] = createExportWrapper("sortChord1");
@@ -5243,6 +5252,12 @@ var _playChord1 = Module["_playChord1"] = createExportWrapper("playChord1");
 
 /** @type {function(...*):?} */
 var _playChord2 = Module["_playChord2"] = createExportWrapper("playChord2");
+
+/** @type {function(...*):?} */
+var _arpegChord1 = Module["_arpegChord1"] = createExportWrapper("arpegChord1");
+
+/** @type {function(...*):?} */
+var _arpegChord2 = Module["_arpegChord2"] = createExportWrapper("arpegChord2");
 
 /** @type {function(...*):?} */
 var _buttonPlayNote = Module["_buttonPlayNote"] = createExportWrapper("buttonPlayNote");

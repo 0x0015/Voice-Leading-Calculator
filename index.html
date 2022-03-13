@@ -582,25 +582,52 @@
 						</td>
 						</tr>
 						<tr>	
-						<td><button class="playChord1 w3-button w3-light-grey" onclick="playChord1()">Play</button></td>
-						<td><button class="playChord2 w3-button w3-light-grey" onclick="playChord2()">Play</button></td>
+						<td>
+							<button class="playChord1 w3-button w3-light-grey" onclick="playChord1()">Play</button>
+							<button class="arpegChord1 w3-button w3-light-grey" onclick="arpegChord1()">Arpegiate</button>
+						</td>
+						<td>
+							<button class="playChord2 w3-button w3-light-grey" onclick="playChord2()">Play</button>	
+							<button class="arpegChord2 w3-button w3-light-grey" onclick="arpegChord2()">Arpegiate</button>
+						</td>
 						</tr>
 					</table>
 					<br>
 					<table class="w3-table">
 						<tr>
-						<th><H4 class="scoreButtonResult"></H4></th>
+							<th><H4 class="scoreButtonResult"></H4></th>
+							<th>
+								<H4>Options:</H4><br>
+								<label>Parallel Fifth Weight: </label>
+								<input class="parallelFithWeightInput" onchange="parallelFithWeightChange()" type="number" value="1"><br>
+								<label>Parallel Octive Weight: </label>
+								<input class="parallelOctiveWeightInput" onchange="parallelOctiveWeightChange()" type="number" value="1"><br>
+							</th>
 						</tr>
 						<tr>
-						<th><button class="optimizeButton w3-button w3-light-grey" onclick="optimizeChordButtonClick()">Optimize Chord</button></th>
+							<th><button class="optimizeButton w3-button w3-light-grey" onclick="optimizeChordButtonClick()">Optimize Chord</button></th>
 						</tr>
 						<tr>
-						<th>
-						<button class="previousChordButton w3-button w3-light-grey" onclick="previousChordButtonClick()">←</button>
-						<text class="optimizeButtonResult"></text>
-						<button class="playOptimizedChord w3-button w3-light-grey" onclick="playOptimizedChord()">Play</button>
-						<button class="nextChordButton w3-button w3-light-grey" onclick="nextChordButtonClick()">→</button>
-						</th>
+							<th>
+							<button class="previousChordButton w3-button w3-light-grey" onclick="previousChordButtonClick()">←</button>
+							<text class="optimizeButtonResult"></text>
+							<div class="optimizeButtonResultDisplay w3-bar">
+								<table class="w3-table">
+									<tr><th><H4 class="w3-border-bottom optimizeButtonResult1"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom optimizeButtonResult2"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom optimizeButtonResult3"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom optimizeButtonResult4"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom optimizeButtonResult5"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom optimizeButtonResult6"></H4></th></tr>
+								</table>
+							</div>
+							<button class="playOptimizedChord w3-button w3-light-grey" onclick="playOptimizedChord()">Play</button>
+							<button class="arpegOptimizedChord w3-button w3-light-grey" onclick="arpegOptimizedChord()">Arpegiate</button>
+							<button class="nextChordButton w3-button w3-light-grey" onclick="nextChordButtonClick()">→</button>
+							</th>
+							<th>
+								<H4 class="optimizeButtonResultAnalysis"></H4>
+							</th>
 						</tr>
 					</table>
 			</div>
