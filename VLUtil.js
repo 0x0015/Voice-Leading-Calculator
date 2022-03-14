@@ -5249,6 +5249,9 @@ var _memorizeChord2 = Module["_memorizeChord2"] = createExportWrapper("memorizeC
 var _clearMemory = Module["_clearMemory"] = createExportWrapper("clearMemory");
 
 /** @type {function(...*):?} */
+var _eraseMemory = Module["_eraseMemory"] = createExportWrapper("eraseMemory");
+
+/** @type {function(...*):?} */
 var _setup = Module["_setup"] = createExportWrapper("setup");
 
 /** @type {function(...*):?} */

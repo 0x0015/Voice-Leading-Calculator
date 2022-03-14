@@ -15,6 +15,7 @@ arpegiateChordChange = Module.cwrap('arpegiateChordChange', '', []);
 playMemory = Module.cwrap('playMemory', '', []);
 playMemoryn = Module.cwrap('playMemoryn', '', ['number']);
 clearMemory = Module.cwrap('clearMemory', '', []);
+eraseMemory = Module.cwrap('eraseMemory', '', []);
 memorizeOptimizedChord = Module.cwrap('memorizeOptimizedChord', '', []);
 memorizeChord1 = Module.cwrap('memorizeChord1', '', []);
 memorizeChord2 = Module.cwrap('memorizeChord2', '', []);
