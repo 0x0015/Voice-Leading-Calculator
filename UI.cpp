@@ -5,6 +5,7 @@
 #include <emscripten.h>
 #include "Player.hpp"
 #include "UI.hpp"
+#include "ChordTable.hpp"
 #include <thread>
 
 extern "C" {
@@ -23,6 +24,7 @@ extern "C" {
 	void EMSCRIPTEN_KEEPALIVE memorizeChord1();
 	void EMSCRIPTEN_KEEPALIVE memorizeChord2();
 	void EMSCRIPTEN_KEEPALIVE clearMemory();
+	void EMSCRIPTEN_KEEPALIVE eraseMemory();
 }
 
 std::string strip(std::string in){
@@ -140,9 +142,29 @@ void setChordMemory(unsigned int chordNumber, std::vector<std::string>& notes){
 
 std::vector<std::vector<uint8_t>> lastOptimizedChord;
 
-std::string getAnalysisText(unsigned int scoreVal){
+std::string getAnalysisText(unsigned int scoreVal, std::vector<uint8_t> chord1 = {}, std::vector<uint8_t> chord2 = {}){
 	std::string scoreAnalysis = "Overall Score: ";
-	scoreAnalysis += std::to_string(scoreVal) + "<br><br>";
+	scoreAnalysis += std::to_string(scoreVal);
+	if(chord1.size() > 0 && chord2.size() > 0){
+		auto chord1intervals = chordTable::getIntervals(chord1);
+		auto chord2intervals = chordTable::getIntervals(chord2);
+		auto chord1T = chordTable::lookup(chord1intervals);
+		auto chord2T = chordTable::lookup(chord2intervals);
+		scoreAnalysis += " (";
+		if(chord1T && chord1T.value().second != ""){
+			scoreAnalysis += chord1T.value().second + " [" + chord1T.value().first + "]";
+		}else{
+			scoreAnalysis += "Unknown";
+		}
+		scoreAnalysis += " - ";
+		if(chord2T && chord2T.value().second != ""){
+			scoreAnalysis += chord2T.value().second + " [" + chord2T.value().first + "]";
+		}else{
+			scoreAnalysis += "Unknown";
+		}
+		scoreAnalysis += ")";
+	}
+	scoreAnalysis += "<br><br>";
 	scoreAnalysis += "Note Difference Score: " + std::to_string(Score::noteDifferenceScore) + "<br>";
 	scoreAnalysis += "Parallel Fifths Score: " + std::to_string(Score::parallelFithsScore) + "<br>";
 	scoreAnalysis += "Parallel Octives Score: " + std::to_string(Score::parallelOctivesScore);
@@ -172,7 +194,7 @@ void showOptimizedChord(unsigned int index){
 	auto scoreText = Element::getByClassName("optimizeButtonResult")[0];
 	scoreText->dom_innerHTML = (std::string)resultText;
 	auto analysisText = Element::getByClassName("optimizeButtonResultAnalysis")[0];
-	analysisText->dom_innerHTML = getAnalysisText(scoreVal);
+	analysisText->dom_innerHTML = getAnalysisText(scoreVal, chord1, lastOptimizedChord[index]);
 	Element::getByClassName("playOptimizedChord")[0]->dom_style["display"] = "";
 	Element::getByClassName("memorizeOptimizedChord")[0]->dom_style["display"] = "";
 	Element::getByClassName("nextChordButton")[0]->dom_style["display"] = "";
@@ -230,7 +252,7 @@ void onNoteChange(){
 		scoreText->dom_innerHTML = (std::string)"Score: N/A";
 	}else{
 		//scoreText->dom_innerHTML = "Score: " + std::to_string(score);
-		scoreText->dom_innerHTML = getAnalysisText(score);
+		scoreText->dom_innerHTML = getAnalysisText(score, chord1, chord2);
 	}
 }
 
@@ -293,6 +315,15 @@ void clearMemory(){
 	Element::getByClassName("memorizeChord2")[0]->dom_disabled = false;
 }
 
+void eraseMemory(){
+	std::vector<std::string> chord = {};
+	setChordMemory(memorizedChords, chord);
+	memorizedChords--;
+	Element::getByClassName("memorizeOptimizedChord")[0]->dom_disabled = false;
+	Element::getByClassName("memorizeChord1")[0]->dom_disabled = false;
+	Element::getByClassName("memorizeChord2")[0]->dom_disabled = false;
+}
+
 void setup(){
 	Element::getByClassName("playOptimizedChord")[0]->dom_style["display"] = "none";
 	Element::getByClassName("memorizeOptimizedChord")[0]->dom_style["display"] = "none";
@@ -303,11 +334,12 @@ void setup(){
 }
 
 int main(){
-	std::cout<<"Voice Leading Calculator:  v0x02"<<std::endl;
+	std::cout<<"Voice Leading Calculator:  v0x03"<<std::endl;
 	setup();
-	onNoteChange();
 	std::string initPlayer = "PlayerInit();";
 	GLOBAL_ACCESS->evalJS(initPlayer);
+	chordTable::load();
+	onNoteChange();
 	return(0);
 }
 

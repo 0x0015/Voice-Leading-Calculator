@@ -1,0 +1,216 @@
+0,0,0,Null set
+2,0C,0,Unison
+2,1B,100000,Semitone/Major 7th
+2,2A,10000,Whole-tone/Diminished 7th
+2,39,1000,Minor third/Major 6th
+2,48,100,Major third/Minor 6th
+2,57,10,Perfect fourth/fifth
+2,66,1,Tritone
+3,11A,210000,BACH or chromatic trimode
+3,129,111000,Phrygian trimode / half/whole trimode
+3,138,101100,Major+minor trichord.1 / mM7 cluster
+3,147,100110,Incomplete major-seventh chord.1 /M7 cluster
+3,156,100011,Tritone+P4.1
+3,219,111000,Minor trimode / whole/half trimode
+3,228,20100,Whole-tone trimode / whole/whole trimode
+3,237,11010,Incomplete minor-seventh chord / two/three trimode / m7 cluster
+3,246,10101,Incomplete dominant-seventh chord.1/Italian-sixth / D7 cluster
+3,255,10020,Quartal trichord
+3,318,101100,Major+minor trichord.2 / 7#5 cluster
+3,327,11010,Incomplete dominant-seventh chord.2 / three/two trimode
+3,336,2001,Diminished triad
+3,345,1110,Minor chord or triad
+3,417,100110,Incomplete major-seventh chord.2
+3,426,10101,Incomplete half-dim-seventh chord / m7b5 cluster
+3,435,1110,Major chord or triad
+3,444,300,augmented chord
+3,516,100011,Tritone+P4.2
+4,1119,321000,BACH or chromatic tetramode
+4,1128,221100,
+4,1137,211110,
+4,1146,210111,
+4,1155,210021,
+4,1218,212100,alternating tetramode
+4,1227,121110,Phrygian tetramode
+4,1236,112011,
+4,1245,111111,all-interval tetrachord.3
+4,1317,201210,
+4,1326,111111,all-interval tetrachord.1
+4,1335,102111,diminished major 7th
+4,1344,101310,mM7
+4,1416,200121,
+4,1425,110121,Lydian Chord no 5th / M7#11 no 5th
+4,1434,101220,Major-seventh chord / M7
+4,1515,200022,
+4,2118,221100,
+4,2127,122010,Minor tetramode
+4,2136,112101,Harmonic-minor tetramode
+4,2145,111120,
+4,2217,121110,Major tetramode
+4,2226,30201,Whole-tone tetramode
+4,2235,21120,add-2 / add-9 / or mu chord
+4,2244,20301,augmented seventh chord / 7#5 
+4,2316,111111,all-interval tetrachord.2
+4,2325,21030,Quartal tetrachord / 7sus4
+4,2334,12111,Half-diminished seventh chord / m7b5
+4,2415,110121,
+4,2424,20202,French-sixth chord / 7b5
+4,3117,211110,
+4,3126,112101,
+4,3135,102210,Major-minor tetrachord
+4,3144,101310,M7#5
+4,3216,112011,
+4,3225,21120,
+4,3234,12120,Minor-seventh chord
+4,3315,102111,
+4,3324,12111,Dominant-seventh/German-sixth chord
+4,3333,4002,Diminished-seventh chord / Diminished tetrachord
+4,4116,210111,
+4,4125,111120,
+4,4215,111111,all-interval tetrachord.4
+5,11118,432100,Chromatic pentamode
+5,11127,332110,
+5,11136,322111,Blues pentamode
+5,11145,321121,
+5,11217,322210,
+5,11226,231211,
+5,11235,222121,
+5,11244,221311,
+5,11316,311221,
+5,11325,221131,
+5,11334,212221, 
+5,11415,310132,
+5,11424,220222, 
+5,12117,322210, 
+5,12126,223111,alternating pentamode.1
+5,12135,213211,
+5,12144,212320,
+5,12216,222121,Locrian pentamode
+5,12225,131221,Phrygian pentamode
+5,12234,122230,Major-ninth chord 
+5,12315,212122,
+5,12324,122131,
+5,12333,114112,
+5,12414,211231,Pelog pentatonic mode
+5,13116,311221,
+5,13125,212221,Gypsy pentamode.1
+5,13134,202420,
+5,13215,212122,Balinese pentamode
+5,13224,121321,Enigmatic pentamode.1 
+5,13233,113221,Neapolitan pentamode.1
+5,13314,202321,
+5,13323,113221,Neapolitan pentamode.2
+5,14115,310132,
+5,14214,211231,Hirajoshi pentatonic mode /  Lydian Chord / M7#11
+5,21117,332110,
+5,21126,232201,
+5,21135,222220, 
+5,21144,221311, 
+5,21216,223111,alternating pentamode.2
+5,21225,132130,Minor pentamode
+5,21234,123121,
+5,21315,212221,Gypsy pentamode.2
+5,21324,122212,French-sixth pentachord.1
+5,21333,114112,Ranjani raga/Flat-ninth pentachord 
+5,22116,231211,
+5,22125,132130,Major pentamode
+5,22134,122311,dim9 chord / 
+5,22215,131221,Lydian pentamode
+5,22224,40402,Whole-tone pentamode
+5,22233,32221,Dominant-ninth/major-minor/Prometheus pentachord
+5,22314,121321,Enigmatic pentamode.2
+5,22323,32140,Pentatonic/Slendro/Bilahari raga/Quartal pentachord 
+5,23115,221131,
+5,23124,122212,
+5,23214,122131,Kumoi pentamode.1 / m6/9 
+5,31116,322111,
+5,31125,222220, 
+5,31134,212320, 
+5,31215,213211, 
+5,31224,122311,
+5,31314,202420,
+5,32115,222121,
+5,32124,123121,
+5,32214,122230,Minor-ninth chord
+5,33114,212221,
+5,41115,321121,
+6,111117,543210,Chromatic hexamode/1st ordall-comb.
+6,111126,443211,Comb.#I11
+6,111135,433221,
+6,111144,432321,comb.=I04
+6,111216,433221,
+6,111225,342231,comb.#I11
+6,111234,333231,
+6,111315,422232,comb.I11
+6,111324,332232,
+6,111333,324222,comb.=I03
+6,111414,421242,comb.=I03
+6,112116,432321,comb.=I06
+6,112125,333231,
+6,112134,323421,comb.#I11
+6,112215,332232,
+6,112224,241422,comb.#I11
+6,112233,233331,
+6,112314,322332,
+6,112323,233241,
+6,113115,421242,
+6,113124,322332,
+6,113133,313431,Schoenberg anagram hexachord
+6,113214,322242,comb.#I11
+6,113223,232341,comb.=I02
+6,113313,313431,Bauli raga descending mode
+6,114114,420243,2nd ord. all-comb.
+6,121116,433221,
+6,121125,333321,
+6,121134,323430,comb.#P06
+6,121215,324222,alternating hexamode/comb.I07
+6,121224,233331,
+6,121233,225222,comb.#I11
+6,121314,313431,
+6,121323,224322,Prometheus Neapolitan mode/comb.=I04
+6,122115,332232,
+6,122124,233241,Locrian hexamode/Suddha Saveri raga mode
+6,122133,224322,comb.=I06
+6,122214,232341,Phrygian hexamode/comb.=I08
+6,122223,142422,Scriabin's 'mystic' or Prometheus hexachord/comb.#I11
+6,122313,223431,comb.#I07
+6,123114,322242,comb.#I05
+6,123123,224223,comb.=P06/#I05+I11
+6,123213,224232,comb.=I09
+6,131115,422232,comb.#I03
+6,131124,322431,comb.#I03
+6,131214,313431,Gypsy mode
+6,131313,303630,3rd ord all-comb.
+6,132114,322332,
+6,132123,224232,comb.=I01
+6,132213,223431,comb.#I11
+6,211116,443211,Comb.#I01
+6,211125,343230,1st ordall-comb.I07
+6,211134,333321,
+6,211215,333321,
+6,211224,242412,comb.#I01
+6,211233,234222,comb.=I06
+6,211314,322431,Megha or Cloud raga mode/comb.#I01
+6,211323,233241,
+6,212115,333231,
+6,212124,234222,Super-Locrian hexamode/comb.=I08
+6,212133,225222,comb.#I01
+6,212214,233241,Minor hexamode
+6,212223,143241,Dorian hexamode/comb.#I01
+6,213114,322332,
+6,213213,224223,comb.=P06/#I01+I07 / tritone scale / petrushka chord
+6,221115,342231,comb.#I03
+6,221124,242412,comb.#I03
+6,221133,233331,
+6,221214,233331,
+6,221223,143250,1st ord.all-comb.I09/major/quartal hexamode
+6,222114,241422,comb.#I05
+6,222123,143241,Dominant-eleventh chord/Lydian hexamode/comb.#I05
+6,222213,142422,Harmonic-overtone hexachord/aug-11th/comb.#I07
+6,222222,60603,Wholetone mode/6th ord all comb.
+6,231114,332232,
+6,311115,433221,
+6,311124,333321,
+6,311214,323430,comb.#P06
+6,312114,323421,comb.#I05
+6,321114,333231,
