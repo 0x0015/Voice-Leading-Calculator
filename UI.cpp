@@ -142,6 +142,29 @@ void setChordMemory(unsigned int chordNumber, std::vector<std::string>& notes){
 
 std::vector<std::vector<uint8_t>> lastOptimizedChord;
 
+template<uint8_t dif> std::vector<std::pair<uint8_t, uint8_t>> getNumStepsRecur(std::vector<uint8_t>& chord){//O(n!)
+	if(chord.size() == 0){
+		return(std::vector<std::pair<uint8_t, uint8_t>>());
+	}
+	std::vector<std::pair<uint8_t, uint8_t>> found;
+	for(int ln = 0;ln<chord.size();ln++){
+		uint8_t lastNote = chord[ln];
+		for(int i=ln;i<chord.size();i++){
+			unsigned int noteDiference = (unsigned int)(std::abs((int)chord[i]-(int)lastNote));
+			if(noteDiference == dif){
+				uint8_t n1 = chord[i];
+				uint8_t n2 = lastNote;
+				if(n1<=n2){
+					found.push_back(std::make_pair(n1, n2));
+				}else{
+					found.push_back(std::make_pair(n2, n1));
+				}
+			}
+		}
+	}
+	return(found);
+}
+
 std::string getAnalysisText(unsigned int scoreVal, std::vector<uint8_t> chord1 = {}, std::vector<uint8_t> chord2 = {}){
 	std::string scoreAnalysis = "Overall Score: ";
 	scoreAnalysis += std::to_string(scoreVal);
@@ -151,23 +174,62 @@ std::string getAnalysisText(unsigned int scoreVal, std::vector<uint8_t> chord1 =
 		auto chord1T = chordTable::lookup(chord1intervals);
 		auto chord2T = chordTable::lookup(chord2intervals);
 		scoreAnalysis += " (";
-		if(chord1T && chord1T.value().second != ""){
+		if(chord1T && chord1T.value().second != "" && strip(chord1T.value().second) != ""){
 			scoreAnalysis += chord1T.value().second + " [" + chord1T.value().first + "]";
 		}else{
-			scoreAnalysis += "Unknown";
+			scoreAnalysis += "Unknown <";
+			for(auto& n : chord1intervals){
+				scoreAnalysis += std::to_string((int)n);
+			}
+			scoreAnalysis += ">";
 		}
 		scoreAnalysis += " - ";
-		if(chord2T && chord2T.value().second != ""){
+		if(chord2T && chord2T.value().second != "" && strip(chord2T.value().second) != ""){
 			scoreAnalysis += chord2T.value().second + " [" + chord2T.value().first + "]";
 		}else{
-			scoreAnalysis += "Unknown";
+			scoreAnalysis += "Unknown <";
+			for(auto& n : chord2intervals){
+				scoreAnalysis += std::to_string((int)n);
+			}
+			scoreAnalysis += ">";
 		}
 		scoreAnalysis += ")";
 	}
 	scoreAnalysis += "<br><br>";
 	scoreAnalysis += "Note Difference Score: " + std::to_string(Score::noteDifferenceScore) + "<br>";
-	scoreAnalysis += "Parallel Fifths Score: " + std::to_string(Score::parallelFithsScore) + "<br>";
+	scoreAnalysis += "Parallel Fifths Score: " + std::to_string(Score::parallelFithsScore);
+	if(chord1.size() > 0 && chord2.size() > 0){
+		auto chord1Fifths = getNumStepsRecur<7>(chord1);
+		auto chord2Fifths = getNumStepsRecur<7>(chord2);
+		if(chord1Fifths.size() > 0 && chord2Fifths.size() > 0){
+			scoreAnalysis += " (";
+			for(auto& o : chord1Fifths){
+				scoreAnalysis += letterFromNote(o.first) + ":" + letterFromNote(o.second);
+			}
+			scoreAnalysis += " - ";
+			for(auto& o : chord2Fifths){
+				scoreAnalysis += letterFromNote(o.first) + ":" + letterFromNote(o.second);
+			}
+			scoreAnalysis += ")";
+		}
+	}
+	scoreAnalysis += "<br>";
 	scoreAnalysis += "Parallel Octives Score: " + std::to_string(Score::parallelOctivesScore);
+	if(chord1.size() > 0 && chord2.size() > 0){
+		auto chord1Octives = getNumStepsRecur<12>(chord1);
+		auto chord2Octives = getNumStepsRecur<12>(chord2);
+		if(chord1Octives.size() > 0 && chord2Octives.size() > 0){
+			scoreAnalysis += " (";
+			for(auto& o : chord1Octives){
+				scoreAnalysis += letterFromNote(o.first) + ":" + letterFromNote(o.second);
+			}
+			scoreAnalysis += " - ";
+			for(auto& o : chord2Octives){
+				scoreAnalysis += letterFromNote(o.first) + ":" + letterFromNote(o.second);
+			}
+			scoreAnalysis += ")";
+		}
+	}
 	return(scoreAnalysis);
 }
 
@@ -334,7 +396,7 @@ void setup(){
 }
 
 int main(){
-	std::cout<<"Voice Leading Calculator:  v0x03"<<std::endl;
+	std::cout<<"Voice Leading Calculator:  v0x04"<<std::endl;
 	setup();
 	std::string initPlayer = "PlayerInit();";
 	GLOBAL_ACCESS->evalJS(initPlayer);

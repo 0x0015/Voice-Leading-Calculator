@@ -1,5 +1,6 @@
 #include "ChordTable.hpp"
 #include "ChordTable.h"
+#include <algorithm>
 
 void chordTable::load(){
 	std::string csv(reinterpret_cast<char*>(ChordTable), ChordTable_len);
@@ -85,7 +86,12 @@ std::optional<std::pair<std::string, std::string>> chordTable::lookup(const std:
 }
 
 
-std::vector<uint8_t> chordTable::getIntervals(const std::vector<uint8_t>& chord){
+std::vector<uint8_t> chordTable::getIntervals(const std::vector<uint8_t>& c){
+	std::vector<uint8_t> chord;
+	for(int i=0;i<c.size();i++){
+		chord.push_back(c[i]%12);
+	}
+	std::sort(chord.begin(), chord.end());
 	std::vector<uint8_t> output;
 	if(chord.size() < 2){
 		return(output);
@@ -93,7 +99,9 @@ std::vector<uint8_t> chordTable::getIntervals(const std::vector<uint8_t>& chord)
 	uint8_t lastVal = chord[0];
 	for(int i=1;i<chord.size();i++){
 		uint8_t difference = (uint8_t)(std::abs((int)chord[i]-(int)lastVal));
-		output.push_back(difference);
+		if(difference != 0){
+			output.push_back(difference);
+		}
 		lastVal = chord[i];
 	}
 	uint8_t sum = 0;

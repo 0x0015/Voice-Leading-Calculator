@@ -74,6 +74,8 @@ template<uint8_t dif> unsigned int findNumStepsRecur(std::vector<uint8_t>& chord
 	return(found);
 }
 
+
+
 unsigned int Score::scoreParallelFiths(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2){
 	unsigned int chord1F = findNumStepsRecur<7>(chord1);
 	if(chord1F > 0){
