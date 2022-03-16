@@ -434,17 +434,20 @@ void memorizeOptimizedChordStart(){
 		std::string note = letterFromNote(chordi[i]);
 		chord.push_back(note);
 	}
-	setChordMemory(1, chord);
+	setChordnL(1, chord);
+	onNoteChange();
 }
 
 void memorizeChord1Start(){
 	auto chord = getChordnL(1);
-	setChordMemory(1, chord);
+	setChordnL(2, chord);
+	onNoteChange();
 }
 
 void memorizeChord2Start(){
 	auto chord = getChordnL(2);
-	setChordMemory(1, chord);
+	setChordnL(1, chord);
+	onNoteChange();
 }
 
 void clearMemory(){
