@@ -178,8 +178,9 @@ std::string getStringFromInterval(const std::vector<uint8_t>& intervals){
 	return(output);
 }
 
-std::string getAnalysisText(unsigned int scoreVal, std::vector<uint8_t> chord1 = {}, std::vector<uint8_t> chord2 = {}, std::optional<std::pair<unsigned int, unsigned int>> chordsWithScore = std::nullopt){
+std::string getAnalysisText(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2, std::optional<std::pair<unsigned int, unsigned int>> chordsWithScore = std::nullopt){
 	std::string scoreAnalysis = "Overall Score: ";
+	unsigned int scoreVal = Score::scoreAll(chord1, chord2);
 	scoreAnalysis += std::to_string(scoreVal);
 	if(chordsWithScore){
 		scoreAnalysis += " (" + std::to_string(chordsWithScore.value().first) + "/" + std::to_string(chordsWithScore.value().second) + ") ";
@@ -291,7 +292,7 @@ int showOptimizedChord(unsigned int index){
 	auto scoreText = Element::getByClassName("optimizeButtonResult")[0];
 	scoreText->dom_innerHTML = (std::string)resultText;
 	auto analysisText = Element::getByClassName("optimizeButtonResultAnalysis")[0];
-	std::string analysisTextIH = getAnalysisText(scoreVal, chord1, lastOptimizedChord[index], std::make_pair(cws_index, chordsWithScore));
+	std::string analysisTextIH = getAnalysisText(chord1, lastOptimizedChord[index], std::make_pair(cws_index, chordsWithScore));
 	analysisText->dom_innerHTML = (std::string)analysisTextIH;
 	Element::getByClassName("playOptimizedChord")[0]->dom_style["display"] = "";
 	Element::getByClassName("memorizeOptimizedChord")[0]->dom_style["display"] = "";
@@ -374,7 +375,7 @@ void onNoteChange(){
 		scoreText->dom_innerHTML = (std::string)"Score: N/A";
 	}else{
 		//scoreText->dom_innerHTML = "Score: " + std::to_string(score);
-		scoreText->dom_innerHTML = getAnalysisText(score, chord1, chord2);
+		scoreText->dom_innerHTML = getAnalysisText(chord1, chord2);
 	}
 }
 
@@ -477,7 +478,7 @@ void setup(){
 }
 
 int main(){
-	std::cout<<"Voice Leading Calculator:  v0x05"<<std::endl;
+	std::cout<<"Voice Leading Calculator:  v0x06"<<std::endl;
 	setup();
 	std::string initPlayer = "PlayerInit();";
 	GLOBAL_ACCESS->evalJS(initPlayer);
