@@ -27,6 +27,7 @@ public:
 	static inline unsigned int noteDifferenceScore = 0;
 	static inline unsigned int parallelFithsScore = 0;
 	static inline unsigned int parallelOctivesScore = 0;
+	static inline bool killUnisons = true;
 	static unsigned int scoreTwo(std::pair<uint8_t, uint8_t> pair1, std::pair<uint8_t, uint8_t> pair2);
 	static unsigned int scoreAll(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2);
 	static unsigned int scoreRanges(std::vector<uint8_t>& chord1, std::vector<uint8_t>& chord2);

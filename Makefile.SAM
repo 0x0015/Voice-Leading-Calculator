@@ -8,11 +8,11 @@ BUILD_CXX_FLAGS	 = {BUILD_CXX_FLAGS}
 LINK_OPTS	 = {LINK_OPTS}
 
 all: $(OBJS)
-	$(CXX) -g $(OBJS) -o $(OUT) $(LINK_OPTS)
+	$(CXX) $(OBJS) -o $(OUT) $(LINK_OPTS)
 
 
 %.cpp.o: %.cpp
-	$(CXX) $< $(BUILD_CXX_FLAGS) -g -c -o $@
+	$(CXX) $< $(BUILD_CXX_FLAGS) -c -o $@
 
 clean:
 	rm -f $(OBJS) $(OUT) {EXTRA_CLEAN}

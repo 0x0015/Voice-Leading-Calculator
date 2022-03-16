@@ -70,7 +70,7 @@ std::optional<std::pair<std::string, std::string>> chordTable::lookup(const std:
 			break;
 		}
 	}
-	std::cout<<"Lookup string: "<<lookupString<<std::endl;
+	//std::cout<<"Lookup string: "<<lookupString<<std::endl;
 	for(auto& entry : table){
 		if(entry.size() != 4){
 			continue;

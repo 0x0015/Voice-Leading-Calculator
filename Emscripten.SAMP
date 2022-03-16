@@ -1,6 +1,6 @@
 CXX : em++
 OUT : em_build/VLUtil.js
-BUILD_CXX_FLAGS : -std=c++17
+BUILD_CXX_FLAGS : -g -std=c++17
 LINK_OPTS : -s WASM=1 -s EXPORTED_RUNTIME_METHODS=ccall,cwrap -s ASSERTIONS=1 WebCpp-Interaction-Lib/libInteraction.a
 PLATFORM_OBJS : UI.cpp.o Player.cpp.o CSV.cpp.o ChordTable.cpp.o
 EXTRA_CLEAN : em_build/VLUtil.wasm

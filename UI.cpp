@@ -23,8 +23,12 @@ extern "C" {
 	void EMSCRIPTEN_KEEPALIVE memorizeOptimizedChord();
 	void EMSCRIPTEN_KEEPALIVE memorizeChord1();
 	void EMSCRIPTEN_KEEPALIVE memorizeChord2();
+	void EMSCRIPTEN_KEEPALIVE memorizeOptimizedChordStart();
+	void EMSCRIPTEN_KEEPALIVE memorizeChord1Start();
+	void EMSCRIPTEN_KEEPALIVE memorizeChord2Start();
 	void EMSCRIPTEN_KEEPALIVE clearMemory();
 	void EMSCRIPTEN_KEEPALIVE eraseMemory();
+	void EMSCRIPTEN_KEEPALIVE killUnisonsChange();
 }
 
 std::string strip(std::string in){
@@ -57,8 +61,8 @@ std::vector<uint8_t> getChordn(unsigned int chordNumber){
 
 std::vector<uint8_t> getMemoryn(unsigned int chordNumber){
 	std::vector<uint8_t> output;
-	for(unsigned int i=0;i<chordMemories;i++){
-		auto cn = Element::getByClassName("ChordMemory" + std::to_string(chordNumber) + "c" + std::to_string(6-i));
+	for(unsigned int i=0;i<notesPerChord;i++){
+		auto cn = Element::getByClassName("ChordMemory" + std::to_string(chordNumber) + "c" + std::to_string(notesPerChord-i));
 		std::string letterActually = (std::string)cn[0]->dom_innerHTML;
 		//std::cout<<"Letteractually: "<<letterActually<<std::endl;
 		if(!(strip(letterActually) == "")){
@@ -165,35 +169,42 @@ template<uint8_t dif> std::vector<std::pair<uint8_t, uint8_t>> getNumStepsRecur(
 	return(found);
 }
 
-std::string getAnalysisText(unsigned int scoreVal, std::vector<uint8_t> chord1 = {}, std::vector<uint8_t> chord2 = {}){
+std::string getStringFromInterval(const std::vector<uint8_t>& intervals){
+	std::string output = "<";	
+	for(auto& n : intervals){
+		output += std::to_string((int)n);
+	}
+	output += ">";
+	return(output);
+}
+
+std::string getAnalysisText(unsigned int scoreVal, std::vector<uint8_t> chord1 = {}, std::vector<uint8_t> chord2 = {}, std::optional<std::pair<unsigned int, unsigned int>> chordsWithScore = std::nullopt){
 	std::string scoreAnalysis = "Overall Score: ";
 	scoreAnalysis += std::to_string(scoreVal);
+	if(chordsWithScore){
+		scoreAnalysis += " (" + std::to_string(chordsWithScore.value().first) + "/" + std::to_string(chordsWithScore.value().second) + ") ";
+	}
 	if(chord1.size() > 0 && chord2.size() > 0){
 		auto chord1intervals = chordTable::getIntervals(chord1);
 		auto chord2intervals = chordTable::getIntervals(chord2);
 		auto chord1T = chordTable::lookup(chord1intervals);
 		auto chord2T = chordTable::lookup(chord2intervals);
-		scoreAnalysis += " (";
-		if(chord1T && chord1T.value().second != "" && strip(chord1T.value().second) != ""){
-			scoreAnalysis += chord1T.value().second + " [" + chord1T.value().first + "]";
-		}else{
-			scoreAnalysis += "Unknown <";
-			for(auto& n : chord1intervals){
-				scoreAnalysis += std::to_string((int)n);
+		scoreAnalysis += "<br>";
+		if(chord1T){
+			if(chord1T.value().second != "" && strip(chord1T.value().second) != ""){
+				scoreAnalysis += getStringFromInterval(chord1intervals) + " " + chord1T.value().second + " [" + chord1T.value().first + "]";
+			}else{
+				scoreAnalysis += getStringFromInterval(chord1intervals) + " Unknown [" + chord1T.value().first + "]";
 			}
-			scoreAnalysis += ">";
 		}
 		scoreAnalysis += " - ";
-		if(chord2T && chord2T.value().second != "" && strip(chord2T.value().second) != ""){
-			scoreAnalysis += chord2T.value().second + " [" + chord2T.value().first + "]";
-		}else{
-			scoreAnalysis += "Unknown <";
-			for(auto& n : chord2intervals){
-				scoreAnalysis += std::to_string((int)n);
+		if(chord2T){
+			if(chord2T.value().second != "" && strip(chord2T.value().second) != ""){
+				scoreAnalysis += getStringFromInterval(chord2intervals) + " " + chord2T.value().second + " [" + chord2T.value().first + "]";
+			}else{
+				scoreAnalysis += getStringFromInterval(chord2intervals) + " Unknown [" + chord2T.value().first + "]";
 			}
-			scoreAnalysis += ">";
 		}
-		scoreAnalysis += ")";
 	}
 	scoreAnalysis += "<br><br>";
 	scoreAnalysis += "Note Difference Score: " + std::to_string(Score::noteDifferenceScore) + "<br>";
@@ -233,37 +244,64 @@ std::string getAnalysisText(unsigned int scoreVal, std::vector<uint8_t> chord1 =
 	return(scoreAnalysis);
 }
 
-void showOptimizedChord(unsigned int index){
+int showOptimizedChord(unsigned int index){
 	if(lastOptimizedChord.size() <= index){
-		return;
+		std::cerr<<"invalid index of optimized chord"<<std::endl;
+		return -1;
 	}
 	std::vector<uint8_t> score = lastOptimizedChord[index];
 	auto chord1 = getChordn(1);
 	unsigned int scoreVal = Score::scoreAll(chord1, score);
 	if(scoreVal == std::numeric_limits<unsigned int>::max()){
-		return;
+		std::cerr<<"invalid score value"<<std::endl;
+		return -1;
 	}
 	std::string resultText = "Result: ";
-	for(unsigned int i=1;i<=6;i++){
+	for(unsigned int i=1;i<=notesPerChord;i++){
 		auto noteScoreText = Element::getByClassName("optimizeButtonResult" + std::to_string(i))[0];
 		noteScoreText->dom_style["display"] = "none";
 	}
 	for(unsigned int i=0;i<score.size();i++){
-		auto noteScoreText = Element::getByClassName("optimizeButtonResult" + std::to_string(6-i))[0];
+		auto noteScoreText = Element::getByClassName("optimizeButtonResult" + std::to_string(notesPerChord-i))[0];
 		noteScoreText->dom_innerHTML = letterFromNote(score[i]);
 		noteScoreText->dom_style["display"] = "";
 	}
+	int chordsWithScore = -1;
+	int cws_index = 0;
+	for(unsigned int i=index;i>0;i--){
+		if(scoreVal == Score::scoreAll(chord1, lastOptimizedChord[i])){
+			chordsWithScore++;
+			cws_index++;
+		}else{
+			break;
+		}
+	}
+	for(unsigned int i=index;i<lastOptimizedChord.size();i++){
+		if(scoreVal == Score::scoreAll(chord1, lastOptimizedChord[i])){
+			chordsWithScore++;
+		}else{
+			break;
+		}
+	}
+	if(cws_index == 0)
+		cws_index++;
+	if(chordsWithScore == 0)
+		chordsWithScore++;
+
 	auto scoreText = Element::getByClassName("optimizeButtonResult")[0];
 	scoreText->dom_innerHTML = (std::string)resultText;
 	auto analysisText = Element::getByClassName("optimizeButtonResultAnalysis")[0];
-	analysisText->dom_innerHTML = getAnalysisText(scoreVal, chord1, lastOptimizedChord[index]);
+	std::string analysisTextIH = getAnalysisText(scoreVal, chord1, lastOptimizedChord[index], std::make_pair(cws_index, chordsWithScore));
+	analysisText->dom_innerHTML = (std::string)analysisTextIH;
 	Element::getByClassName("playOptimizedChord")[0]->dom_style["display"] = "";
 	Element::getByClassName("memorizeOptimizedChord")[0]->dom_style["display"] = "";
+	Element::getByClassName("memorizeOptimizedChordStart")[0]->dom_style["display"] = "";
 	Element::getByClassName("nextChordButton")[0]->dom_style["display"] = "";
 	Element::getByClassName("previousChordButton")[0]->dom_style["display"] = "";
 	Element::getByClassName("optimizeButtonResultDisplay")[0]->dom_style["display"] = "";
 	Element::getByClassName("optimizeButtonResultAnalysis")[0]->dom_style["display"] = "";
 	Element::getByClassName("previousChordButton")[0]->dom_disabled = true;
+	return(0);
 }
 
 unsigned int currentChordIndex = 0;
@@ -272,8 +310,26 @@ void optimizeChordButtonClick(){
 	auto chord1 = getChordn(1);
 	auto chord2 = getChordn(2);
 	lastOptimizedChord = Score::optimizeScore(chord1, chord2);
+	std::sort(lastOptimizedChord.begin(), lastOptimizedChord.end(), [&](auto& obj1, auto& obj2){
+		return(Score::scoreAll(chord1, obj1) < Score::scoreAll(chord1, obj2));
+	});
 	currentChordIndex = 0;
 	showOptimizedChord(currentChordIndex);
+}
+
+int hasOptimizedChord(unsigned int index){
+	if(lastOptimizedChord.size() <= index){
+		std::cerr<<"invalid index of optimized chord"<<std::endl;
+		return -1;
+	}
+	std::vector<uint8_t> score = lastOptimizedChord[index];
+	auto chord1 = getChordn(1);
+	unsigned int scoreVal = Score::scoreAll(chord1, score);
+	if(scoreVal == std::numeric_limits<unsigned int>::max()){
+		std::cerr<<"invalid score value"<<std::endl;
+		return -1;
+	}
+	return(0);
 }
 
 void nextChordButtonClick(){
@@ -287,6 +343,10 @@ void nextChordButtonClick(){
 		}
 		Element::getByClassName("previousChordButton")[0]->dom_disabled = false;
 		playOptimizedChord();
+		if(currentChordIndex+1 < lastOptimizedChord.size() && hasOptimizedChord(currentChordIndex+1) != 0){
+			Element::getByClassName("nextChordButton")[0]->dom_disabled = true;
+			return;
+		}
 	}
 }
 
@@ -366,6 +426,26 @@ void memorizeChord2(){
 	}
 }
 
+void memorizeOptimizedChordStart(){
+	auto chordi = lastOptimizedChord[currentChordIndex];
+	std::vector<std::string> chord;
+	for(int i=0;i<chordi.size();i++){
+		std::string note = letterFromNote(chordi[i]);
+		chord.push_back(note);
+	}
+	setChordMemory(1, chord);
+}
+
+void memorizeChord1Start(){
+	auto chord = getChordnL(1);
+	setChordMemory(1, chord);
+}
+
+void memorizeChord2Start(){
+	auto chord = getChordnL(2);
+	setChordMemory(1, chord);
+}
+
 void clearMemory(){
 	std::vector<std::string> chord = {};
 	for(int i=1;i<=chordMemories;i++){
@@ -389,6 +469,7 @@ void eraseMemory(){
 void setup(){
 	Element::getByClassName("playOptimizedChord")[0]->dom_style["display"] = "none";
 	Element::getByClassName("memorizeOptimizedChord")[0]->dom_style["display"] = "none";
+	Element::getByClassName("memorizeOptimizedChordStart")[0]->dom_style["display"] = "none";
 	Element::getByClassName("previousChordButton")[0]->dom_style["display"] = "none";
 	Element::getByClassName("nextChordButton")[0]->dom_style["display"] = "none";
 	Element::getByClassName("optimizeButtonResultDisplay")[0]->dom_style["display"] = "none";
@@ -396,7 +477,7 @@ void setup(){
 }
 
 int main(){
-	std::cout<<"Voice Leading Calculator:  v0x04"<<std::endl;
+	std::cout<<"Voice Leading Calculator:  v0x05"<<std::endl;
 	setup();
 	std::string initPlayer = "PlayerInit();";
 	GLOBAL_ACCESS->evalJS(initPlayer);
@@ -416,6 +497,10 @@ void playOptimizedChord(){
 void arpegiateChordChange(){
 	arpegiate = Element::getByClassName("arpegiateChord")[0]->dom_checked;
 
+}
+
+void killUnisonsChange(){
+	Score::killUnisons = Element::getByClassName("removeUnison")[0]->dom_checked;
 }
 
 std::vector<std::string> sortChord(std::vector<std::string>& chord){

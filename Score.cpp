@@ -105,7 +105,7 @@ unsigned int Score::scoreAll(std::vector<uint8_t>& chord1, std::vector<uint8_t>&
 	if(chord1.size() == 0 || chord2.size() == 0){
 		return(std::numeric_limits<unsigned int>::max());
 	}
-	if(findNumSteps<0>(chord1) > 0 || findNumSteps<0>(chord2) > 0){
+	if(killUnisons && (findNumSteps<0>(chord1) > 0 || findNumSteps<0>(chord2) > 0)){
 		return(std::numeric_limits<unsigned int>::max());
 	}
 	unsigned int numNotes = std::min(chord1.size(), chord2.size());

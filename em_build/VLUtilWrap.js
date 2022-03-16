@@ -19,3 +19,7 @@ eraseMemory = Module.cwrap('eraseMemory', '', []);
 memorizeOptimizedChord = Module.cwrap('memorizeOptimizedChord', '', []);
 memorizeChord1 = Module.cwrap('memorizeChord1', '', []);
 memorizeChord2 = Module.cwrap('memorizeChord2', '', []);
+memorizeOptimizedChordStart = Module.cwrap('memorizeOptimizedChordStart', '', []);
+memorizeChord1Start = Module.cwrap('memorizeChord1Start', '', []);
+memorizeChord2Start = Module.cwrap('memorizeChord2Start', '', []);
+killUnisonsChange = Module.cwrap('killUnisonsChange', '', []);
