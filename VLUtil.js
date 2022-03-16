@@ -5246,6 +5246,15 @@ var _memorizeChord1 = Module["_memorizeChord1"] = createExportWrapper("memorizeC
 var _memorizeChord2 = Module["_memorizeChord2"] = createExportWrapper("memorizeChord2");
 
 /** @type {function(...*):?} */
+var _memorizeOptimizedChordStart = Module["_memorizeOptimizedChordStart"] = createExportWrapper("memorizeOptimizedChordStart");
+
+/** @type {function(...*):?} */
+var _memorizeChord1Start = Module["_memorizeChord1Start"] = createExportWrapper("memorizeChord1Start");
+
+/** @type {function(...*):?} */
+var _memorizeChord2Start = Module["_memorizeChord2Start"] = createExportWrapper("memorizeChord2Start");
+
+/** @type {function(...*):?} */
 var _clearMemory = Module["_clearMemory"] = createExportWrapper("clearMemory");
 
 /** @type {function(...*):?} */
@@ -5256,6 +5265,9 @@ var _setup = Module["_setup"] = createExportWrapper("setup");
 
 /** @type {function(...*):?} */
 var _arpegiateChordChange = Module["_arpegiateChordChange"] = createExportWrapper("arpegiateChordChange");
+
+/** @type {function(...*):?} */
+var _killUnisonsChange = Module["_killUnisonsChange"] = createExportWrapper("killUnisonsChange");
 
 /** @type {function(...*):?} */
 var _sortChord1 = Module["_sortChord1"] = createExportWrapper("sortChord1");
@@ -5712,15 +5724,8 @@ function callMain(args) {
 
   var entryFunction = Module['_main'];
 
-  args = args || [];
-
-  var argc = args.length+1;
-  var argv = stackAlloc((argc + 1) * 4);
-  HEAP32[argv >> 2] = allocateUTF8OnStack(thisProgram);
-  for (var i = 1; i < argc; i++) {
-    HEAP32[(argv >> 2) + i] = allocateUTF8OnStack(args[i - 1]);
-  }
-  HEAP32[(argv >> 2) + argc] = 0;
+  var argc = 0;
+  var argv = 0;
 
   try {
 

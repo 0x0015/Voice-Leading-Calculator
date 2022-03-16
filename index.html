@@ -34,8 +34,8 @@
 			<div class="w3-container">
 					<table class="w3-table">
 						<tr>
-						<td><H4>First Chord: </H4></td>
-						<td><H4>Second Chord: </H4></td>
+						<td><H4>Starting Chord: </H4></td>
+						<td><H4>Destination Chord: </H4></td>
 						</tr>
 						<tr>
 						<td><button class="sortChord1 w3-button w3-light-grey" onclick="sortChord1()">Sort</button></td>
@@ -585,10 +585,12 @@
 						<td>
 							<button class="playChord1 w3-button w3-light-grey" onclick="playChord1()">Play</button>
 							<button class="memorizeChord1 w3-button w3-light-grey" onclick="memorizeChord1()">+Bank</button>
+							<button class="memorizeChord1 w3-button w3-light-grey" onclick="memorizeChord1Start()">+Start</button>
 						</td>
 						<td>
 							<button class="playChord2 w3-button w3-light-grey" onclick="playChord2()">Play</button>
 							<button class="memorizeChord2 w3-button w3-light-grey" onclick="memorizeChord2()">+Bank</button>
+							<button class="memorizeChord2 w3-button w3-light-grey" onclick="memorizeChord2Start()">+Start</button>
 						</td>
 						</tr>
 					</table>
@@ -604,6 +606,8 @@
 								<input class="parallelFithWeightInput" onchange="parallelFithWeightChange()" type="number" value="1"><br>
 								<label>Parallel Octive Weight: </label>
 								<input class="parallelOctiveWeightInput" onchange="parallelOctiveWeightChange()" type="number" value="1"><br>
+								<input type="checkbox" class="removeUnison" id="removeUnison" checked="true" onchange="killUnisonsChange()">
+								<label for="removeUnison">Remove Unisons</label>
 							</th>
 						</tr>
 						<tr>
@@ -625,6 +629,7 @@
 							</div>
 							<button class="playOptimizedChord w3-button w3-light-grey" onclick="playOptimizedChord()">Play</button>
 							<button class="memorizeOptimizedChord w3-button w3-light-grey" onclick="memorizeOptimizedChord()">+Bank</button>
+							<button class="memorizeOptimizedChordStart w3-button w3-light-grey" onclick="memorizeOptimizedChordStart()">+Start</button>
 							<button class="nextChordButton w3-button w3-light-grey" onclick="nextChordButtonClick()">→</button>
 							</th>
 							<th>
@@ -711,6 +716,32 @@
 									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory6c5"></H4></th></tr>
 									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory6c6"></H4></th></tr>
 									<tr><th><button class="playChordMemory6 w3-button w3-light-grey" onclick="playMemoryn(6)">Play</button></th></tr>
+								</table>
+							</div>
+						</th>
+						<th>
+							<div class="chordMemory7 w3-bar">
+								<table class="w3-table">
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory7c1"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory7c2"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory7c3"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory7c4"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory7c5"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory7c6"></H4></th></tr>
+									<tr><th><button class="playChordMemory7 w3-button w3-light-grey" onclick="playMemoryn(7)">Play</button></th></tr>
+								</table>
+							</div>
+						</th>
+						<th>
+							<div class="chordMemory8 w3-bar">
+								<table class="w3-table">
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory8c1"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory8c2"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory8c3"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory8c4"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory8c5"></H4></th></tr>
+									<tr><th><H4 class="w3-border-bottom w3-padding-small ChordMemory8c6"></H4></th></tr>
+									<tr><th><button class="playChordMemory8 w3-button w3-light-grey" onclick="playMemoryn(8)">Play</button></th></tr>
 								</table>
 							</div>
 						</th>
